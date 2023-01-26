@@ -1,0 +1,1 @@
+void krectangle(char x,char w,char y,char h,char color);

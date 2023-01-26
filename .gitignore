@@ -1,0 +1,5 @@
+.vscode
+emu/__pycache__
+emu/vasm
+emu/vasm6502_oldstyle
+*.o
