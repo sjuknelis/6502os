@@ -34,9 +34,9 @@ The function `hline(x,w,y)` uses these I/O ports to draw a horizontal line of le
 
 Modern CPUs have features such as segmentation and paging that make it possible for a program to read from one byte in memory and actually get back a different one. This mapping of what a program thinks it is reading to what it is actually reading is configured by the OS. This is useful because it means that programs do not have to worry about what spaces in memory are used by other programs. For example, if two instances of the same program are to be run simultaneously, they will both depend on e.g. memory address `$0001`. If the OS configures the mapping system so that, for one instance, `$0001` maps to `$1001`, and for the other, `$0001` maps to `$2001`, the programs will not interfere with each other.
 
-The 6502 CPU does not have such a system built-in. However, if we expand the size of our RAM module so that it requires a 24-bit address, the lower 16 bits can remain connected to the address bus of the CPU while the upper 8 bits can be connected to an 8-bit port on the I/O device (I chose `$8003` as the port). Then, before running task 1, the OS can set `$8003` to `$01`, and task 1's read from `$0001` will be mapped to `$010001` on the RAM. Before running task 2, the OS sets `$8003` to `$02`, so task 2's read from `$0001` will be mapped to `$020001`. In effect, this achieves the same goals as a modern memory management system.
+The 6502 CPU does not have such a system built-in. However, if we expand the size of our RAM module so that it requires a 24-bit address, the lower 16 bits can remain connected to the address bus of the CPU while the upper 8 bits can be connected to an 8-bit port on the I/O device (I chose `$8004` as the port). Then, before running task 1, the OS can set `$8004` to `$01`, and task 1's read from `$0001` will be mapped to `$010001` on the RAM. Before running task 2, the OS sets `$8004` to `$02`, so task 2's read from `$0001` will be mapped to `$020001`. In effect, this achieves the same goals as a modern memory management system.
 
-I refer to a RAM region of `$10000` as a memory bank, and the value written to `$8003` is the memory bank index.
+I refer to a RAM region of `$10000` as a memory bank, and the value written to `$8004` is the memory bank index.
 
 ## 4. Basic Multitasking (tasks/context.s)
 
@@ -48,9 +48,9 @@ As explained above, each task is given its own memory bank, with memory bank 0 b
 
 ## 5. Security
 
-The memory bank logic in our CPU provides an extra benefit, which is that one program can't tamper with the memory being used by another. However, right now, this is very easy to circumvent, because all a program has to do is write to `$8003` and it will be able to access other tasks' memory. In addition, we might not want all tasks to be able to access the I/O directly; for example, we might not want every program to be able to format the disk.
+The memory bank logic in our CPU provides an extra benefit, which is that one program can't tamper with the memory being used by another. However, right now, this is very easy to circumvent, because all a program has to do is write to `$8004` and it will be able to access other tasks' memory. In addition, we might not want all tasks to be able to access the I/O directly; for example, we might not want every program to be able to format the disk.
 
-To prevent this, a flag on the I/O device itself (`$8004`), when set, will prevent any further writes to I/O. In hardware, this might be implemented by somehow completely disabling the I/O device's chip-select pin. An NMI will clear this flag and allow further access to I/O. As long as the OS sets this flag before resuming a task, no task will be able to directly write to the I/O device. Upon an NMI, at the same moment when access to I/O is regained, CPU control is passed back to OS code, making it so that only the OS can access I/O.
+To prevent this, a flag on the I/O device itself (`$8005`), when set, will prevent any further writes to I/O. In hardware, this might be implemented by somehow completely disabling the I/O device's chip-select pin. An NMI will clear this flag and allow further access to I/O. As long as the OS sets this flag before resuming a task, no task will be able to directly write to the I/O device. Upon an NMI, at the same moment when access to I/O is regained, CPU control is passed back to OS code, making it so that only the OS can access I/O.
 
 ## 6. System calls (tasks/tasks.c, stdlib/syscall.c)
 
@@ -65,8 +65,9 @@ The function `process_syscalls(memory_bank)` is responsible for reading the inte
 * `$8000`: Screen pixel low byte
 * `$8001`: Screen pixel high byte
 * `$8002`: Screen color (write to draw on screen)
-* `$8003`: Memory bank index
-* `$8004`: I/O device lock
+* `$8003`: Serial print
+* `$8004`: Memory bank index
+* `$8005`: I/O device lock
 * `$8005`: Mouse X pixel
 * `$8006`: Mouse Y pixel
 * `$8007`: Mouse/keyboard last event (write to clear)
