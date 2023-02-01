@@ -5,7 +5,7 @@ typedef struct {
   char *next;
 } malloc_header_t;
 
-malloc_header_t *first = 0x1000;
+malloc_header_t *first = (malloc_header_t*) 0x1000;
 
 void init_malloc() {
   first -> is_full = 0;
@@ -20,7 +20,7 @@ char *malloc(int size) {
 
   while ( current != 0 ) {
     if ( ! current -> is_full && current -> size >= size ) break;
-    current = current -> next;
+    current = (malloc_header_t*) current -> next;
   }
 
   if ( current != 0 ) {
@@ -31,32 +31,32 @@ char *malloc(int size) {
       created = (malloc_header_t*) ((char*) current + sizeof(malloc_header_t) + size);
       created -> is_full = 0;
       created -> size = current -> size - size - sizeof(malloc_header_t);
-      created -> prev = current;
+      created -> prev = (char*) current;
       created -> next = current -> next;
-      ((malloc_header_t*) created -> next) -> prev = created;
-      current -> next = created;
+      ((malloc_header_t*) created -> next) -> prev = (char*) created;
+      current -> next = (char*) created;
       current -> size = size;
     }
-    return current + 1;
+    return (char*) current + 1;
   }
   return 0;
 }
 
 void merge_empties(malloc_header_t *first) {
-  malloc_header_t *second = first -> next;
-  malloc_header_t *third = second -> next;
+  malloc_header_t *second = (malloc_header_t*) first -> next;
+  malloc_header_t *third = (malloc_header_t*) second -> next;
 
   first -> size += sizeof(malloc_header_t) + second -> size;
-  first -> next = third;
-  third -> prev = first;
+  first -> next = (char*) third;
+  third -> prev = (char*) first;
 }
 
 void free(char *ptr) {
-  malloc_header_t *current = ptr - sizeof(malloc_header_t);
+  malloc_header_t *current = (malloc_header_t*) ptr - sizeof(malloc_header_t);
   current -> is_full = 0;
 
   if ( current -> prev && ! ((malloc_header_t*) current -> prev) -> is_full ) {
-    current = current -> prev;
+    current = (malloc_header_t*) current -> prev;
     merge_empties(current);
   }
   

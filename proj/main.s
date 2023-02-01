@@ -11,8 +11,291 @@
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
 	.forceimport	__STARTUP__
-	.import		_run_tasks
+	.import		_kprint
+	.import		_kclear
+	.export		_input_buf
+	.export		_input_buf_write_ptr
+	.export		_input_buf_read_ptr
+	.export		_strcmp
+	.export		_memset
+	.export		_shell
 	.export		_main
+
+.segment	"DATA"
+
+_input_buf:
+	.word	$7E00
+_input_buf_write_ptr:
+	.word	$7DFF
+_input_buf_read_ptr:
+	.byte	$00
+
+.segment	"RODATA"
+
+S0002:
+	.byte	$77,$6F,$72,$6C,$64,$0A,$00
+S0003:
+	.byte	$63,$6C,$65,$61,$72,$00
+S0001:
+	.byte	$68,$65,$6C,$6C,$6F,$00
+
+; ---------------------------------------------------------------
+; int __near__ strcmp (char *stra, char *strb)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_strcmp: near
+
+.segment	"CODE"
+
+	jsr     pushax
+	lda     #$00
+	jsr     pusha
+	jmp     L0004
+L0002:	ldy     #$04
+	jsr     ldaxysp
+	sta     ptr1
+	stx     ptr1+1
+	ldy     #$00
+	lda     (sp),y
+	tay
+	lda     (ptr1),y
+	sta     sreg
+	ldy     #$02
+	jsr     ldaxysp
+	sta     ptr1
+	stx     ptr1+1
+	ldy     #$00
+	lda     (sp),y
+	tay
+	lda     (ptr1),y
+	cmp     sreg
+	beq     L0007
+	ldy     #$04
+	jsr     ldaxysp
+	sta     ptr1
+	stx     ptr1+1
+	ldy     #$00
+	lda     (sp),y
+	tay
+	lda     (ptr1),y
+	jsr     pusha0
+	ldy     #$04
+	jsr     ldaxysp
+	sta     ptr1
+	stx     ptr1+1
+	ldy     #$02
+	lda     (sp),y
+	tay
+	lda     (ptr1),y
+	jsr     tossuba0
+	jmp     L0001
+L0007:	ldy     #$00
+	clc
+	lda     #$01
+	adc     (sp),y
+	sta     (sp),y
+L0004:	ldy     #$04
+	jsr     ldaxysp
+	sta     ptr1
+	stx     ptr1+1
+	ldy     #$00
+	lda     (sp),y
+	tay
+	lda     (ptr1),y
+	bne     L0002
+	ldy     #$02
+	jsr     ldaxysp
+	sta     ptr1
+	stx     ptr1+1
+	ldy     #$00
+	lda     (sp),y
+	tay
+	lda     (ptr1),y
+	bne     L0002
+	tax
+L0001:	jmp     incsp5
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ memset (char *mem, char value, char size)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_memset: near
+
+.segment	"CODE"
+
+	jsr     pusha
+	lda     #$00
+	jsr     pusha
+	tay
+L0007:	lda     (sp),y
+	iny
+	cmp     (sp),y
+	bcs     L0003
+	lda     (sp),y
+	clc
+	ldy     #$03
+	adc     (sp),y
+	sta     ptr1
+	lda     #$00
+	iny
+	adc     (sp),y
+	sta     ptr1+1
+	ldy     #$02
+	lda     (sp),y
+	ldy     #$00
+	sta     (ptr1),y
+	clc
+	lda     #$01
+	adc     (sp),y
+	sta     (sp),y
+	jmp     L0007
+L0003:	jmp     incsp5
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ shell (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_shell: near
+
+.segment	"CODE"
+
+	ldy     #$19
+	jsr     subysp
+	lda     #$00
+	jsr     pusha
+	jsr     decsp2
+	ldy     #$01
+L0002:	lda     M0001,y
+	sta     (sp),y
+	dey
+	bpl     L0002
+	lda     #$03
+	jsr     leaa0sp
+	sta     ptr1
+	stx     ptr1+1
+	lda     #$00
+	ldy     #$17
+L0016:	sta     (ptr1),y
+	dey
+	bpl     L0016
+	lda     ptr1
+	ldx     ptr1+1
+	jsr     _kclear
+	jmp     L000A
+L0006:	lda     _input_buf
+	ldx     _input_buf+1
+	ldy     _input_buf_read_ptr
+	sta     ptr1
+	stx     ptr1+1
+	lda     (ptr1),y
+	ldy     #$1B
+	sta     (sp),y
+	ldy     #$00
+	sta     (sp),y
+	lda     sp
+	ldx     sp+1
+	jsr     _kprint
+	inc     _input_buf_read_ptr
+	ldy     #$1B
+	lda     (sp),y
+	cmp     #$08
+	beq     L0011
+	cmp     #$0D
+	bne     L0013
+	lda     #$03
+	jsr     leaa0sp
+	jsr     pushax
+	lda     #<(S0001)
+	ldx     #>(S0001)
+	jsr     _strcmp
+	cpx     #$00
+	bne     L000C
+	cmp     #$00
+	bne     L000C
+	lda     #<(S0002)
+	ldx     #>(S0002)
+	jsr     _kprint
+	jmp     L000F
+L000C:	lda     #$03
+	jsr     leaa0sp
+	jsr     pushax
+	lda     #<(S0003)
+	ldx     #>(S0003)
+	jsr     _strcmp
+	cpx     #$00
+	bne     L000F
+	cmp     #$00
+	bne     L000F
+	jsr     _kclear
+L000F:	lda     #$03
+	jsr     leaa0sp
+	sta     ptr1
+	stx     ptr1+1
+	lda     #$00
+	ldy     #$17
+L0017:	sta     (ptr1),y
+	dey
+	bpl     L0017
+	lda     #$00
+	ldy     #$02
+	jmp     L0018
+L0011:	lda     #$03
+	jsr     leaa0sp
+	ldy     #$02
+	sta     ptr1
+	stx     ptr1+1
+	lda     (sp),y
+	tay
+	lda     #$00
+	sta     (ptr1),y
+	ldy     #$02
+	lda     (sp),y
+	sec
+	sbc     #$01
+	jmp     L0018
+L0013:	lda     #$03
+	jsr     leaa0sp
+	sta     ptr1
+	stx     ptr1+1
+	lda     (sp),y
+	pha
+	ldy     #$02
+	lda     (sp),y
+	tay
+	pla
+	sta     (ptr1),y
+	ldy     #$02
+	clc
+	lda     #$01
+	adc     (sp),y
+L0018:	sta     (sp),y
+L000A:	lda     _input_buf_write_ptr+1
+	sta     ptr1+1
+	lda     _input_buf_write_ptr
+	sta     ptr1
+	ldy     #$00
+	lda     (ptr1),y
+	cmp     _input_buf_read_ptr
+	jne     L0006
+	jmp     L000A
+
+.segment	"RODATA"
+
+M0001:
+	.byte	$00
+	.byte	$00
+
+.endproc
 
 ; ---------------------------------------------------------------
 ; void __near__ main (void)
@@ -24,7 +307,7 @@
 
 .segment	"CODE"
 
-	jmp     _run_tasks
+	jmp     _shell
 
 .endproc
 

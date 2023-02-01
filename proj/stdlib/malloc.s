@@ -241,7 +241,7 @@ L0003:	ldy     #$02
 	sta     (ptr1),y
 L000C:	ldy     #$03
 	jsr     ldaxysp
-	jsr     incax7
+	jsr     incax1
 	jmp     L0001
 L000A:	tax
 L0001:	jmp     incsp6
@@ -326,7 +326,8 @@ L0001:	jmp     incsp6
 
 	jsr     pushax
 	jsr     ldax0sp
-	jsr     decax7
+	ldy     #$31
+	jsr     decaxy
 	jsr     pushax
 	jsr     ldax0sp
 	sta     ptr1

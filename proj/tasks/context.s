@@ -10,7 +10,11 @@ INIT_VECTOR_HI = $7ff1
 SP_STORE = $7ff2
 NMI_DETECT = $7ff3
 
+INPUT_BUF = $7e00
+INPUT_BUF_WRITE_PTR = $7dff
+
 MEMORY_BANK = $8004
+INPUT_PORT = $8007
 TRANSFER_REG = $800C
 
 .segment	"CODE"
@@ -107,8 +111,29 @@ TRANSFER_REG = $800C
 .segment "STARTUP"
 
 _nmi_int:
-  ; Check if in mb 0 and continue if no
+  ; Check if interrupt caused by input
   pha
+  lda INPUT_PORT
+  beq timer_int
+
+  ; Handle input interrupt
+  tya
+  pha
+
+  ldy INPUT_BUF_WRITE_PTR
+  lda INPUT_PORT
+  sta INPUT_BUF,y
+  inc INPUT_BUF_WRITE_PTR
+  sta INPUT_PORT
+
+  pla
+  tay
+  pla
+
+  rti
+
+timer_int:
+  ; Check if in mb 0 and continue if no
   lda MEMORY_BANK
   bne go_to_0
 

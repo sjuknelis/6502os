@@ -396,11 +396,6 @@ L0009:	ldy     #$02
 	lda     #<(_flashing)
 	ldx     #>(_flashing)
 	jsr     _init_task
-	lda     #$02
-	jsr     pusha
-	lda     #<(_flashing_fast)
-	ldx     #>(_flashing_fast)
-	jsr     _init_task
 L0021:	lda     #$00
 	tay
 	sta     (sp),y

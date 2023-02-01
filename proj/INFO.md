@@ -60,6 +60,10 @@ While running, a program can write "packets" to this interaction space. For exam
 
 The function `process_syscalls(memory_bank)` is responsible for reading the interaction space and carrying out the syscalls, whereas `syscall.c` contains utility functions to be used by programs. These utility functions simply write packets into the interaction space to later be read by the OS.
 
+## 7. Printing text to the screen (drivers/graphics.c)
+
+In order to draw text to the screen, 
+
 ## I/O Device Reference
 
 * `$8000`: Screen pixel low byte

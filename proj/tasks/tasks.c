@@ -71,7 +71,6 @@ void run_tasks() {
   char i,j;
   char task_run = 0;
   init_task(1,flashing);
-  init_task(2,flashing_fast);
   while ( 1 ) {
     task_run = 0;
     for ( i = 1; i < TASK_COUNT; i++ ) {

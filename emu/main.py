@@ -29,12 +29,13 @@ alterations = []
 screen_matrix = array.array("B",[0] * 256 * 128)
 screen_matrix_pointer = 0
 mouse_pos = (0,0)
+key_down = 0
 
 def io_write(index,value):
     if logging:
         print("io",hex(index),hex(value))
 
-    global screen_matrix,screen_matrix_pointer
+    global screen_matrix,screen_matrix_pointer,key_down
 
     if index == 0:
         # Screen lo
@@ -49,6 +50,8 @@ def io_write(index,value):
     elif index == 3:
         # Serial data
         print(chr(value),end="",flush=True)
+    elif index == 7:
+        key_down = 0
 
 def io_read(index):
     if index == 2:
@@ -60,6 +63,8 @@ def io_read(index):
     elif index == 6:
         # Mouse Y
         return mouse_pos[1] // 2
+    elif index == 7:
+        return key_down
     else:
         return -1 # MMU will default to last written byte
 
@@ -74,6 +79,8 @@ try:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
+                elif event.type == pygame.KEYDOWN:
+                    key_down = event.key
             for alteration in alterations:
                 y = alteration[0] // 128
                 x = alteration[0] % 128
@@ -83,10 +90,10 @@ try:
             mouse_pos = pygame.mouse.get_pos()
             pygame.display.flip()
 
+        cpu.interrupt("NMI")
         cpu_start_time = time.time()
         for i in range(10000):
             cpu.step()
-        cpu.interrupt("NMI")
 
         if frame_logging:
             frame_time = time.time() - start_time
