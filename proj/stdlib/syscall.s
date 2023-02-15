@@ -17,6 +17,8 @@
 	.export		_rectangle
 	.export		_sprint_hex
 	.export		_sleep
+	.export		_init_flash
+	.export		_kill_flash
 
 .segment	"DATA"
 
@@ -295,6 +297,52 @@ L0002:	lda     _table+1
 	adc     _head_index
 	sta     _head_index
 	jmp     incsp2
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ init_flash (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_init_flash: near
+
+.segment	"CODE"
+
+	jsr     _reset_head
+	lda     _table+1
+	sta     ptr1+1
+	lda     _table
+	sta     ptr1
+	ldy     _head_index
+	lda     #$04
+	sta     (ptr1),y
+	inc     _head_index
+	rts
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ kill_flash (void)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_kill_flash: near
+
+.segment	"CODE"
+
+	jsr     _reset_head
+	lda     _table+1
+	sta     ptr1+1
+	lda     _table
+	sta     ptr1
+	ldy     _head_index
+	lda     #$05
+	sta     (ptr1),y
+	inc     _head_index
+	rts
 
 .endproc
 

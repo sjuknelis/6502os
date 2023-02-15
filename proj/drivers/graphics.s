@@ -22,6 +22,32 @@
 
 .segment	"DATA"
 
+_kprint_row:
+	.byte	$00
+_kprint_col:
+	.byte	$00
+_kprint_end_per_line:
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+	.byte	$00
+
+.segment	"RODATA"
+
 _letters:
 	.byte	$00
 	.byte	$00
@@ -1258,29 +1284,6 @@ _letters:
 	.byte	$00
 	.byte	$00
 	.byte	$00
-_kprint_row:
-	.byte	$00
-_kprint_col:
-	.byte	$00
-_kprint_end_per_line:
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
-	.byte	$00
 
 ; ---------------------------------------------------------------
 ; void __near__ krectangle (char x, char w, char y, char h, char color)
@@ -1331,7 +1334,7 @@ L0003:	jmp     incsp6
 .endproc
 
 ; ---------------------------------------------------------------
-; void __near__ kbitmap (char *bitmap, char x, char y, char w, char h, char color0, char color1)
+; void __near__ kbitmap (const char *bitmap, char x, char y, char w, char h, char color0, char color1)
 ; ---------------------------------------------------------------
 
 .segment	"CODE"
@@ -1356,6 +1359,8 @@ L0003:	jmp     incsp6
 	jsr     pusha
 	lda     #$07
 	jsr     pusha
+	lda     #$01
+	sta     $7000
 	ldy     #$0B
 	lda     (sp),y
 	ldy     #$05
@@ -1646,7 +1651,9 @@ L0004:	ldy     #$05
 	lda     #$01
 	adc     (sp),y
 	jmp     L0023
-L0003:	ldy     #$0F
+L0003:	lda     #$00
+	sta     $7000
+	ldy     #$0F
 	jmp     addysp
 
 .endproc
@@ -1936,6 +1943,8 @@ M0001:
 	jsr     pusha
 	lda     #$00
 	jsr     pusha
+	lda     #$01
+	sta     $7000
 	ldy     #$04
 	lda     (sp),y
 	lsr     a
@@ -2008,7 +2017,7 @@ L0007:	ldy     #$06
 	cmp     #$01
 	jsr     booleq
 	eor     ptr1
-	beq     L000A
+	beq     L000F
 	ldy     #$01
 	lda     (sp),y
 	sta     $8000
@@ -2023,7 +2032,9 @@ L0007:	ldy     #$06
 	asl     a
 	ora     ptr1
 	sta     $8002
-L000A:	jmp     incsp7
+	txa
+L000F:	sta     $7000
+	jmp     incsp7
 
 .endproc
 

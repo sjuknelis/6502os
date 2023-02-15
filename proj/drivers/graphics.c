@@ -4,11 +4,14 @@
 #define SCREEN_HI     *(char*) 0x8001
 #define SCREEN_DATA   *(char*) 0x8002
 
+#define NO_INT   *(char*) 0x7000
+
 void hline(char x,char w,char y,char color) {
   const char color_byte = (color << 4) | color;
   char lo = x / 2;
   char i = 0;
 
+  NO_INT = 1;
   SCREEN_HI = y / 2;
   if ( y % 2 == 1 ) lo += 128;
   if ( x % 2 == 1 ) {
@@ -26,6 +29,7 @@ void hline(char x,char w,char y,char color) {
     SCREEN_LO = lo;
     SCREEN_DATA = (SCREEN_DATA & 0x0f) | (color << 4);
   }
+  NO_INT = 0;
 }
 
 void krectangle(char x,char w,char y,char h,char color) {
@@ -35,11 +39,12 @@ void krectangle(char x,char w,char y,char h,char color) {
   }
 }
 
-void kbitmap(char* bitmap,char x,char y,char w,char h,char color0,char color1) {
+void kbitmap(const char* bitmap,char x,char y,char w,char h,char color0,char color1) {
   char lo,cur_y,high_four,low_four,i;
   char mat_byte = w * h / 8 - 1;
   char mat_bit = 7;
 
+  NO_INT = 1;
   for ( cur_y = y; cur_y < y + h; cur_y++ ) {
     SCREEN_HI = cur_y / 2;
     lo = x / 2;
@@ -83,9 +88,10 @@ void kbitmap(char* bitmap,char x,char y,char w,char h,char color0,char color1) {
       }
     }
   }
+  NO_INT = 0;
 }
 
-char letters[95][13] = {
+const char letters[95][13] = {
   {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
   {0x00, 0x00, 0x18, 0x18, 0x00, 0x00, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18},
   {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x36, 0x36, 0x36, 0x36},

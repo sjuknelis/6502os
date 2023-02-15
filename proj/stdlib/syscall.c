@@ -38,3 +38,15 @@ void sleep(int periods) {
   table[head_index] = 0x03;
   head_index += 3;
 }
+
+void init_flash() {
+  reset_head();
+  table[head_index] = 0x04;
+  head_index += 1;
+}
+
+void kill_flash() {
+  reset_head();
+  table[head_index] = 0x05;
+  head_index += 1;
+}

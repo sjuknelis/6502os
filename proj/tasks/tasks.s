@@ -14,101 +14,23 @@
 	.import		_continue_task
 	.import		_krectangle
 	.import		_ksprint_hex
-	.import		_yield
-	.import		_rectangle
-	.import		_sprint_hex
-	.import		_sleep
-	.export		_flashing
-	.export		_flashing_fast
+	.import		_shell
+	.import		_flashing
 	.export		_tasks
 	.export		_init_task
+	.export		_flash_index
 	.export		_process_syscalls
 	.export		_run_tasks
+
+.segment	"DATA"
+
+_flash_index:
+	.byte	$02
 
 .segment	"BSS"
 
 _tasks:
-	.res	12,$00
-
-; ---------------------------------------------------------------
-; void __near__ flashing (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_flashing: near
-
-.segment	"CODE"
-
-	lda     #$00
-	jsr     pusha
-L0002:	ldy     #$00
-	lda     (sp),y
-	clc
-	adc     #$01
-	and     #$07
-	sta     (sp),y
-	tya
-	jsr     pusha
-	lda     #$20
-	jsr     pusha
-	lda     #$00
-	jsr     pusha
-	lda     #$20
-	jsr     pusha
-	ldy     #$04
-	lda     (sp),y
-	jsr     _rectangle
-	ldx     #$00
-	lda     (sp,x)
-	jsr     _sprint_hex
-	ldx     #$00
-	lda     #$1E
-	jsr     _sleep
-	jsr     _yield
-	jmp     L0002
-
-.endproc
-
-; ---------------------------------------------------------------
-; void __near__ flashing_fast (void)
-; ---------------------------------------------------------------
-
-.segment	"CODE"
-
-.proc	_flashing_fast: near
-
-.segment	"CODE"
-
-	lda     #$00
-	jsr     pusha
-L0002:	ldy     #$00
-	lda     (sp),y
-	clc
-	adc     #$01
-	and     #$07
-	sta     (sp),y
-	lda     #$80
-	jsr     pusha
-	lda     #$20
-	jsr     pusha
-	lda     #$80
-	jsr     pusha
-	lda     #$20
-	jsr     pusha
-	ldy     #$04
-	lda     (sp),y
-	jsr     _rectangle
-	ldx     #$00
-	lda     (sp,x)
-	jsr     _sprint_hex
-	ldx     #$00
-	lda     #$14
-	jsr     _sleep
-	jsr     _yield
-	jmp     L0002
-
-.endproc
+	.res	24,$00
 
 ; ---------------------------------------------------------------
 ; void __near__ init_task (char mb, void *func)
@@ -176,7 +98,7 @@ L0002:	ldy     #$00
 	lda     #$00
 	jsr     pushax
 	jsr     pusha
-	jmp     L0009
+	jmp     L000D
 L0002:	ldy     #$02
 	jsr     ldaxysp
 	sta     ptr1
@@ -264,7 +186,7 @@ L0002:	ldy     #$02
 	ldy     #$00
 	clc
 	lda     #$06
-	jmp     L000B
+	jmp     L000F
 L0005:	ldy     #$02
 	jsr     ldaxysp
 	sta     ptr1
@@ -305,7 +227,10 @@ L0005:	ldy     #$02
 	tax
 	lda     sreg
 	jsr     _ksprint_hex
-	jmp     L000E
+	ldy     #$00
+	clc
+	lda     #$03
+	jmp     L000F
 L0007:	ldy     #$02
 	jsr     ldaxysp
 	sta     ptr1
@@ -360,12 +285,48 @@ L0007:	ldy     #$02
 	iny
 	txa
 	sta     (ptr2),y
-L000E:	ldy     #$00
+	ldy     #$00
 	clc
 	lda     #$03
-L000B:	adc     (sp),y
-	sta     (sp),y
+	jmp     L000F
 L0009:	ldy     #$02
+	jsr     ldaxysp
+	sta     ptr1
+	stx     ptr1+1
+	ldy     #$00
+	lda     (sp),y
+	tay
+	lda     (ptr1),y
+	cmp     #$04
+	bne     L000B
+	lda     _flash_index
+	jsr     pusha
+	lda     #<(_flashing)
+	ldx     #>(_flashing)
+	jsr     _init_task
+	inc     _flash_index
+	jmp     L0012
+L000B:	ldy     #$02
+	jsr     ldaxysp
+	sta     ptr1
+	stx     ptr1+1
+	ldy     #$00
+	lda     (sp),y
+	tay
+	lda     (ptr1),y
+	cmp     #$05
+	bne     L000D
+	lda     #$00
+	sta     _tasks+6
+	sta     _tasks+9
+	lda     #$02
+	sta     _flash_index
+L0012:	ldy     #$00
+	clc
+	lda     #$01
+L000F:	adc     (sp),y
+	sta     (sp),y
+L000D:	ldy     #$02
 	jsr     ldaxysp
 	sta     ptr1
 	stx     ptr1+1
@@ -393,8 +354,8 @@ L0009:	ldy     #$02
 	jsr     pusha
 	lda     #$01
 	jsr     pusha
-	lda     #<(_flashing)
-	ldx     #>(_flashing)
+	lda     #<(_shell)
+	ldx     #>(_shell)
 	jsr     _init_task
 L0021:	lda     #$00
 	tay
@@ -402,7 +363,7 @@ L0021:	lda     #$00
 	lda     #$01
 	ldy     #$02
 L001F:	sta     (sp),y
-	cmp     #$04
+	cmp     #$08
 	jcs     L0006
 	ldx     #$00
 	lda     (sp),y
@@ -441,7 +402,7 @@ L001F:	sta     (sp),y
 	lda     #$01
 	tay
 L001E:	sta     (sp),y
-	cmp     #$04
+	cmp     #$08
 	bcs     L0024
 	ldx     #$00
 	lda     (sp),y
@@ -503,7 +464,7 @@ L0025:	lda     $7FF3
 	lda     #$01
 	ldy     #$02
 L0020:	sta     (sp),y
-	cmp     #$04
+	cmp     #$08
 	jcs     L0021
 	ldx     #$00
 	lda     (sp),y

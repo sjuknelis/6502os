@@ -3,7 +3,7 @@ import array
 class MMU:
     def __init__(self,rom_image,io_write,io_read,logging=False):
         self.rom = array.array("B",[0] * 0x7000)
-        self.ram = array.array("B",[0] * 0x20000)
+        self.ram = array.array("B",[0] * 0x40000)
         self.ram_pointer = 0x0
         self.io_buffer = [0] * 16
 
@@ -16,7 +16,7 @@ class MMU:
         self.logging = logging
 
     def reset(self):
-        self.ram = array.array("B",[0] * 0x20000)
+        self.ram = array.array("B",[0] * 0x40000)
 
     def write(self,address,value):
         if self.logging:

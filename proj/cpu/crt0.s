@@ -1,7 +1,3 @@
-; ---------------------------------------------------------------------------
-; crt0.s
-; ---------------------------------------------------------------------------
-;
 ; Startup code for cc65 (Single Board Computer version)
 
 .export   _init, _exit, _irq_int
@@ -14,47 +10,47 @@
 
 .include  "zeropage.inc"
 
-; ---------------------------------------------------------------------------
-; Place the startup code in a special segment
-
 .segment  "STARTUP"
 
-; ---------------------------------------------------------------------------
-; A little light 6502 housekeeping
-
 _irq_int:
-_init:    LDX     #$FF                 ; Initialize stack pointer to $01FF
-          TXS
-          CLD                          ; Clear decimal mode
+  ; Serial print X
+  lda #88
+  sta $8003
+  jmp _irq_int
 
-; ---------------------------------------------------------------------------
-; Set cc65 argument stack pointer
+_init:
+  ; Serial print I
+  lda #73
+  sta $8003
 
-          LDA     #<(__RAM_START__ + __RAM_SIZE__)
-          STA     sp
-          LDA     #>(__RAM_START__ + __RAM_SIZE__)
-          STA     sp+1
+  ; Initialize stack pointer to $01FF
+  ldx #$ff
+  txs
 
-; ---------------------------------------------------------------------------
-; Initialize memory storage
+  ; Clear decimal mode
+  cld                     
 
-          JSR     zerobss              ; Clear BSS segment
-          JSR     copydata             ; Initialize DATA segment
-          JSR     initlib              ; Run constructors
+  ; Set cc65 argument stack pointer
+  lda #<(__RAM_START__ + __RAM_SIZE__)
+  sta sp
+  lda #>(__RAM_START__ + __RAM_SIZE__)
+  sta sp + 1
 
-; ---------------------------------------------------------------------------
-; Call main()
+  ; Initialize memory storage
+  jsr zerobss   ; Clear BSS segment
+  jsr copydata  ; Initialize DATA segment
+  jsr initlib   ; Run constructors
 
-          JSR     _main
+  ; Call main()
+  jsr _main
 
-; ---------------------------------------------------------------------------
-; Back from main (this is also the _exit entry):  force a software break
-
-_exit:    JSR     donelib              ; Run destructors
-          BRK
+_exit:
+  ; Back from main (this is also the _exit entry)
+  jsr donelib
+  brk
 
 .segment  "VECTORS"
 
-.addr      _nmi_int    ; NMI vector
-.addr      _init       ; Reset vector
-.addr      _irq_int    ; IRQ/BRK vector
+.addr _nmi_int  ; NMI vector
+.addr _init     ; Reset vector
+.addr _irq_int  ; IRQ/BRK vector

@@ -5,6 +5,8 @@
 .export   _nmi_int
 .export		_init_task_internal,_continue_task
 
+NO_INT = $7000
+
 INIT_VECTOR_LO = $7ff0
 INIT_VECTOR_HI = $7ff1
 SP_STORE = $7ff2
@@ -117,8 +119,14 @@ _nmi_int:
   beq timer_int
 
   ; Handle input interrupt
+  txa
+  pha
   tya
   pha
+
+  ldx MEMORY_BANK
+  lda #1
+  sta MEMORY_BANK
 
   ldy INPUT_BUF_WRITE_PTR
   lda INPUT_PORT
@@ -126,13 +134,21 @@ _nmi_int:
   inc INPUT_BUF_WRITE_PTR
   sta INPUT_PORT
 
+  stx MEMORY_BANK
+
   pla
   tay
+  pla
+  tax
   pla
 
   rti
 
 timer_int:
+  ; Check if NO_INT flag is set
+  lda NO_INT
+  bne fast_exit_int
+
   ; Check if in mb 0 and continue if no
   lda MEMORY_BANK
   bne go_to_0
@@ -211,3 +227,7 @@ copy_data:
 
   ; Return from continue_task
   rts
+
+fast_exit_int:
+  pla
+  rti

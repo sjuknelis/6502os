@@ -71,6 +71,7 @@ def io_read(index):
 rom_image = open("a.out","rb").read()
 mmu = MMU(rom_image,io_write,io_read,logging)
 cpu = CPU(mmu,logging=logging)
+cpu.r.pc = cpu.interruptAddress("RESET")
 
 try:
     while True:
