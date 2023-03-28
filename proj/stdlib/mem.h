@@ -3,5 +3,6 @@
 
 int strcmp(char* stra,char* strb);
 void memset(char* mem,char value,char size);
+int inttostr(int value,char* str);
 
 #endif

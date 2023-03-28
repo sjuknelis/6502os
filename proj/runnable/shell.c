@@ -2,6 +2,7 @@
 #include "../drivers/graphics.h"
 #include "../tasks/tasks.h"
 #include "../stdlib/syscall.h"
+#include "../drivers/serial.h"
 
 #define MOUSE_X *(char*) 0x8005
 #define MOUSE_Y *(char*) 0x8006
@@ -43,6 +44,7 @@ void shell() {
       input_byte = *(input_buf + input_buf_read_ptr);
       print_str[0] = input_byte;
       kprint(print_str);
+      ksprint_hex(input_byte);
       input_buf_read_ptr++;
 
       switch ( input_byte ) {

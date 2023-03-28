@@ -17,6 +17,7 @@
 	.import		_kclear
 	.import		_init_flash
 	.import		_kill_flash
+	.import		_ksprint_hex
 	.export		_flashing
 	.export		_input_buf
 	.export		_input_buf_write_ptr
@@ -154,6 +155,10 @@ L0006:	lda     _input_buf
 	lda     sp
 	ldx     sp+1
 	jsr     _kprint
+	ldy     #$1B
+	ldx     #$00
+	lda     (sp),y
+	jsr     _ksprint_hex
 	inc     _input_buf_read_ptr
 	ldy     #$1B
 	lda     (sp),y

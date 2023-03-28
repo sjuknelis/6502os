@@ -13,3 +13,26 @@ void memset(char* mem,char value,char size) {
     mem[size] = value;
   }
 }
+
+int inttostr(int value,char* str) {
+  char buf[16];
+  char i = 15;
+  char start_i;
+  if ( value == 0 ) {
+    str[0] = '0';
+    str[1] = 0;
+    return 1;
+  }
+  while ( value > 0 ) {
+    buf[i] = value % 10 + '0';
+    value /= 10;
+    i--;
+  }
+  i++;
+  start_i = i;
+  for ( ; i < 16; i++ ) {
+    str[i - start_i] = buf[i];
+  }
+  str[i - start_i] = 0;
+  return i - start_i;
+}

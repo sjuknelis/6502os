@@ -128,16 +128,10 @@ _nmi_int:
   lda #1
   sta MEMORY_BANK
 
-writing:
   ldy INPUT_BUF_WRITE_PTR
   lda INPUT_PORT
   sta INPUT_BUF,y
   inc INPUT_BUF_WRITE_PTR
-
-  inc MEMORY_BANK
-  lda MEMORY_BANK
-  cmp #4
-  bne writing
   sta INPUT_PORT
 
   stx MEMORY_BANK
@@ -148,7 +142,7 @@ writing:
   tax
   pla
 
-  jmp _nmi_int
+  rti
 
 timer_int:
   ; Check if NO_INT flag is set

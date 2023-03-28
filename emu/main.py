@@ -29,13 +29,15 @@ alterations = []
 screen_matrix = array.array("B",[0] * 256 * 128)
 screen_matrix_pointer = 0
 mouse_pos = (0,0)
+mouse_down = False
+mouse_impulse = False
 key_down = 0
 
 def io_write(index,value):
     if logging:
         print("io",hex(index),hex(value))
 
-    global screen_matrix,screen_matrix_pointer,key_down
+    global screen_matrix,screen_matrix_pointer,key_down,mouse_impulse
 
     if index == 0:
         # Screen lo
@@ -52,6 +54,7 @@ def io_write(index,value):
         print(chr(value),end="",flush=True)
     elif index == 7:
         key_down = 0
+        mouse_impulse = False
 
 def io_read(index):
     if index == 2:
@@ -64,7 +67,7 @@ def io_read(index):
         # Mouse Y
         return mouse_pos[1] // 2
     elif index == 7:
-        return key_down
+        return key_down | (mouse_impulse << 7)
     else:
         return -1 # MMU will default to last written byte
 
@@ -89,6 +92,9 @@ try:
                 pygame.draw.rect(screen,COLORS[alteration[1] & 0x0f],(x * 4 + 2,y * 2,2,2))
             alterations = []
             mouse_pos = pygame.mouse.get_pos()
+            if pygame.mouse.get_pressed()[0] and not mouse_down:
+                mouse_impulse = True
+            mouse_down = pygame.mouse.get_pressed()[0]
             pygame.display.flip()
 
         cpu.interrupt("NMI")

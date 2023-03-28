@@ -1,4 +1,5 @@
 #include "graphics.h"
+#include "serial.h"
 
 #define SCREEN_LO     *(char*) 0x8000
 #define SCREEN_HI     *(char*) 0x8001
@@ -36,6 +37,42 @@ void krectangle(char x,char w,char y,char h,char color) {
   char i;
   for ( i = y; i < y + h; i++ ) {
     hline(x,w,i,color);
+  }
+}
+
+void hreplace(char x,char w,char y,char to,char from) {
+  const char to_color_byte = (to << 4) | to;
+  const char from_color_byte = (from << 4) | from;
+  char lo = x / 2;
+  char i = 0;
+
+  NO_INT = 1;
+  SCREEN_HI = y / 2;
+  if ( y % 2 == 1 ) lo += 128;
+  if ( x % 2 == 1 ) {
+    SCREEN_LO = lo;
+    if ( SCREEN_DATA & 0x0f == from ) SCREEN_DATA = (SCREEN_DATA & 0xf0) | to;
+    lo++;
+    i = 1;
+  }
+  for ( ; i < w - 1; i += 2 ) {
+    SCREEN_LO = lo;
+    if ( SCREEN_DATA == from_color_byte ) SCREEN_DATA = to_color_byte;
+    else if ( SCREEN_DATA == from ) SCREEN_DATA = (SCREEN_DATA & 0xf0) | to; // temp
+    else if ( (SCREEN_DATA & 0xf0) >> 4 == from ) SCREEN_DATA = (SCREEN_DATA & 0x0f) | (to << 4);
+    lo++;
+  }
+  if ( (x % 2 == 1) ^ (w % 2 == 1) ) {
+    SCREEN_LO = lo;
+    if ( SCREEN_DATA >> 4 == from ) SCREEN_DATA = (SCREEN_DATA & 0x0f) | (to << 4);
+  }
+  NO_INT = 0;
+}
+
+void kreplace(char x,char w,char y,char h,char to,char from) {
+  char i;
+  for ( i = y; i < y + h; i++ ) {
+    hreplace(x,w,i,to,from);
   }
 }
 
@@ -226,6 +263,16 @@ void kprint(char* str) {
         }
         kbitmap(letters['_' - ' '],kprint_col * 9,kprint_row * 14,8,13,1,7);
     }
+    i++;
+  }
+}
+
+void ktext(char* str,char xo,char y,char fcolor,char bcolor) {
+  char i = 0;
+  char x = xo;
+  while ( str[i] != 0 ) {
+    kbitmap(letters[str[i] - ' '],x,y,8,13,bcolor,fcolor);
+    x += 9;
     i++;
   }
 }

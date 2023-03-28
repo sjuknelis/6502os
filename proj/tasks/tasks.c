@@ -3,6 +3,7 @@
 #include "../drivers/serial.h"
 #include "../stdlib/syscall.h"
 #include "../runnable/shell.h"
+#include "../runnable/calculator.h"
 
 #define TASK_JUMP_LO  *(char*) 0x7ff0
 #define TASK_JUMP_HI  *(char*) 0x7ff1
@@ -26,7 +27,8 @@ void init_task(char mb,void* func) {
   init_task_internal(mb);
 }
 
-char flash_index = 2;
+char flash_index = 1;
+char flash_triggered = 0;
 
 void process_syscalls(char task) {
   char* table = (char*) 0x7f00;
@@ -58,10 +60,13 @@ void process_syscalls(char task) {
   }
 }
 
+#define MOUSE_X *(char*) 0x8005
+#define MOUSE_Y *(char*) 0x8006
+
 void run_tasks() {
   char i,j;
   char task_run = 0;
-  init_task(1,shell);
+  //init_task(1,cmain);
   //init_task(2,flashing);
   while ( 1 ) {
     task_run = 0;
@@ -81,6 +86,16 @@ void run_tasks() {
       for ( i = 1; i < TASK_COUNT; i++ ) {
         if ( tasks[i].sleeping != 0 ) tasks[i].sleeping--;
       }
+    }
+    krectangle(0,10,0,10,4);
+    if ( MOUSE_X <= 10 && MOUSE_Y <= 10 ) {
+      if ( ! flash_triggered ) {
+        flash_triggered = 1;
+        init_task(flash_index,cmain);
+        flash_index++;
+      }
+    } else {
+      flash_triggered = 0;
     }
   }
 }

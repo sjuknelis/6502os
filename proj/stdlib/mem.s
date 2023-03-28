@@ -12,6 +12,7 @@
 	.macpack	longbranch
 	.export		_strcmp
 	.export		_memset
+	.export		_inttostr
 
 ; ---------------------------------------------------------------
 ; int __near__ strcmp (char *stra, char *strb)
@@ -130,6 +131,167 @@ L0007:	lda     (sp),y
 	sta     (sp),y
 	jmp     L0007
 L0003:	jmp     incsp5
+
+.endproc
+
+; ---------------------------------------------------------------
+; int __near__ inttostr (int value, char *str)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_inttostr: near
+
+.segment	"CODE"
+
+	jsr     pushax
+	ldy     #$10
+	jsr     subysp
+	lda     #$0F
+	jsr     pusha
+	jsr     decsp1
+	ldy     #$14
+	lda     (sp),y
+	iny
+	ora     (sp),y
+	bne     L000F
+	ldy     #$13
+	jsr     ldaxysp
+	sta     ptr1
+	stx     ptr1+1
+	lda     #$30
+	ldy     #$00
+	sta     (ptr1),y
+	ldy     #$13
+	jsr     ldaxysp
+	jsr     incax1
+	sta     ptr1
+	stx     ptr1+1
+	lda     #$00
+	tay
+	sta     (ptr1),y
+	tax
+	lda     #$01
+	jmp     L0001
+L0004:	lda     #$02
+	jsr     leaa0sp
+	ldy     #$01
+	clc
+	adc     (sp),y
+	bcc     L0008
+	inx
+L0008:	jsr     pushax
+	ldy     #$19
+	jsr     pushwysp
+	ldy     #$00
+	ldx     #$00
+	lda     #$0A
+	jsr     tosmoda0
+	ldy     #$30
+	jsr     incaxy
+	ldy     #$00
+	jsr     staspidx
+	ldy     #$17
+	jsr     pushwysp
+	lda     #$0A
+	jsr     tosdiva0
+	ldy     #$14
+	jsr     staxysp
+	ldy     #$01
+	lda     (sp),y
+	sec
+	sbc     #$01
+	sta     (sp),y
+	ldy     #$15
+L000F:	jsr     ldaxysp
+	cmp     #$01
+	txa
+	sbc     #$00
+	bvs     L0007
+	eor     #$80
+L0007:	bmi     L0004
+	ldy     #$01
+	clc
+	tya
+	adc     (sp),y
+	sta     (sp),y
+	dey
+L000E:	sta     (sp),y
+	ldy     #$01
+	lda     (sp),y
+	cmp     #$10
+	bcs     L000A
+	ldx     #$00
+	lda     (sp),y
+	sec
+	dey
+	sbc     (sp),y
+	pha
+	txa
+	sbc     #$00
+	tax
+	pla
+	clc
+	ldy     #$12
+	adc     (sp),y
+	pha
+	txa
+	iny
+	adc     (sp),y
+	tax
+	pla
+	jsr     pushax
+	lda     #$04
+	jsr     leaa0sp
+	ldy     #$03
+	clc
+	adc     (sp),y
+	bcc     L000D
+	inx
+L000D:	sta     ptr1
+	stx     ptr1+1
+	ldy     #$00
+	lda     (ptr1),y
+	jsr     staspidx
+	ldy     #$01
+	clc
+	tya
+	adc     (sp),y
+	jmp     L000E
+L000A:	ldx     #$00
+	lda     (sp),y
+	sec
+	dey
+	sbc     (sp),y
+	pha
+	txa
+	sbc     #$00
+	tax
+	pla
+	clc
+	ldy     #$12
+	adc     (sp),y
+	sta     ptr1
+	txa
+	iny
+	adc     (sp),y
+	sta     ptr1+1
+	lda     #$00
+	tay
+	sta     (ptr1),y
+	iny
+	tax
+	lda     (sp),y
+	sec
+	dey
+	sbc     (sp),y
+	pha
+	txa
+	sbc     #$00
+	tax
+	pla
+L0001:	ldy     #$16
+	jmp     addysp
 
 .endproc
 

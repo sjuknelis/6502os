@@ -11,10 +11,13 @@
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
 	.export		_krectangle
+	.export		_kreplace
 	.export		_kbitmap
 	.export		_kprint
+	.export		_ktext
 	.export		_kclear
 	.export		_hline
+	.export		_hreplace
 	.export		_letters
 	.export		_kprint_row
 	.export		_kprint_col
@@ -1334,6 +1337,57 @@ L0003:	jmp     incsp6
 .endproc
 
 ; ---------------------------------------------------------------
+; void __near__ kreplace (char x, char w, char y, char h, char to, char from)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_kreplace: near
+
+.segment	"CODE"
+
+	jsr     pusha
+	jsr     decsp1
+	ldy     #$04
+	lda     (sp),y
+	ldy     #$00
+L0007:	sta     (sp),y
+	lda     (sp),y
+	jsr     pusha0
+	ldy     #$05
+	lda     (sp),y
+	clc
+	iny
+	adc     (sp),y
+	bcc     L0006
+	inx
+L0006:	jsr     tosicmp
+	bpl     L0003
+	ldy     #$06
+	lda     (sp),y
+	jsr     pusha
+	ldy     #$06
+	lda     (sp),y
+	jsr     pusha
+	ldy     #$02
+	lda     (sp),y
+	jsr     pusha
+	ldy     #$05
+	lda     (sp),y
+	jsr     pusha
+	ldy     #$05
+	lda     (sp),y
+	jsr     _hreplace
+	ldy     #$00
+	clc
+	lda     #$01
+	adc     (sp),y
+	jmp     L0007
+L0003:	jmp     incsp7
+
+.endproc
+
+; ---------------------------------------------------------------
 ; void __near__ kbitmap (const char *bitmap, char x, char y, char w, char h, char color0, char color1)
 ; ---------------------------------------------------------------
 
@@ -1874,6 +1928,84 @@ L0004:	ldy     #$02
 .endproc
 
 ; ---------------------------------------------------------------
+; void __near__ ktext (char *str, char xo, char y, char fcolor, char bcolor)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_ktext: near
+
+.segment	"CODE"
+
+	jsr     pusha
+	lda     #$00
+	jsr     pusha
+	ldy     #$04
+	lda     (sp),y
+	jsr     pusha
+	jmp     L0004
+L0002:	ldy     #$07
+	jsr     ldaxysp
+	sta     ptr1
+	stx     ptr1+1
+	ldy     #$01
+	lda     (sp),y
+	tay
+	ldx     #$00
+	lda     (ptr1),y
+	ldy     #$20
+	jsr     decaxy
+	jsr     pushax
+	lda     #$0D
+	jsr     tosmula0
+	clc
+	adc     #<(_letters)
+	tay
+	txa
+	adc     #>(_letters)
+	tax
+	tya
+	jsr     pushax
+	ldy     #$02
+	lda     (sp),y
+	jsr     pusha
+	ldy     #$07
+	lda     (sp),y
+	jsr     pusha
+	lda     #$08
+	jsr     pusha
+	lda     #$0D
+	jsr     pusha
+	ldy     #$08
+	lda     (sp),y
+	jsr     pusha
+	ldy     #$0A
+	lda     (sp),y
+	jsr     _kbitmap
+	ldy     #$00
+	clc
+	lda     #$09
+	adc     (sp),y
+	sta     (sp),y
+	iny
+	clc
+	tya
+	adc     (sp),y
+	sta     (sp),y
+L0004:	ldy     #$07
+	jsr     ldaxysp
+	sta     ptr1
+	stx     ptr1+1
+	ldy     #$01
+	lda     (sp),y
+	tay
+	lda     (ptr1),y
+	bne     L0002
+	jmp     incsp8
+
+.endproc
+
+; ---------------------------------------------------------------
 ; void __near__ kclear (void)
 ; ---------------------------------------------------------------
 
@@ -2035,6 +2167,188 @@ L0007:	ldy     #$06
 	txa
 L000F:	sta     $7000
 	jmp     incsp7
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ hreplace (char x, char w, char y, char to, char from)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_hreplace: near
+
+.segment	"CODE"
+
+	jsr     pusha
+	ldy     #$01
+	lda     (sp),y
+	asl     a
+	asl     a
+	asl     a
+	asl     a
+	sta     ptr1
+	lda     (sp),y
+	ora     ptr1
+	jsr     pusha
+	ldy     #$01
+	lda     (sp),y
+	asl     a
+	asl     a
+	asl     a
+	asl     a
+	sta     ptr1
+	lda     (sp),y
+	ora     ptr1
+	jsr     pusha
+	ldy     #$06
+	lda     (sp),y
+	lsr     a
+	jsr     pusha
+	lda     #$00
+	jsr     pusha
+	lda     #$01
+	sta     $7000
+	ldy     #$06
+	lda     (sp),y
+	lsr     a
+	sta     $8001
+	lda     (sp),y
+	and     #$01
+	cmp     #$01
+	bne     L0002
+	tay
+	clc
+	lda     #$80
+	adc     (sp),y
+	sta     (sp),y
+L0002:	ldy     #$08
+	lda     (sp),y
+	and     #$01
+	cmp     #$01
+	bne     L0004
+	tay
+	lda     (sp),y
+	sta     $8000
+	lda     #$0F
+	ldy     #$04
+	cmp     (sp),y
+	jsr     booleq
+	and     $8002
+	pha
+	pla
+	beq     L0006
+	lda     $8002
+	and     #$F0
+	sta     ptr1
+	iny
+	lda     (sp),y
+	ora     ptr1
+	sta     $8002
+L0006:	ldy     #$01
+	clc
+	tya
+	adc     (sp),y
+	sta     (sp),y
+	tya
+	dey
+L0015:	sta     (sp),y
+L0004:	ldx     #$00
+	lda     (sp,x)
+	jsr     pusha0
+	ldy     #$09
+	lda     (sp),y
+	jsr     decax1
+	jsr     tosicmp
+	bpl     L0008
+	ldy     #$01
+	lda     (sp),y
+	sta     $8000
+	lda     $8002
+	iny
+	cmp     (sp),y
+	bne     L0016
+	iny
+	lda     (sp),y
+	jmp     L0014
+L0016:	lda     $8002
+	ldy     #$04
+	cmp     (sp),y
+	bne     L0017
+	lda     $8002
+	and     #$F0
+	sta     ptr1
+	iny
+	lda     (sp),y
+	jmp     L001C
+L0017:	lda     $8002
+	and     #$F0
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	cmp     (sp),y
+	bne     L000F
+	lda     $8002
+	and     #$0F
+	sta     ptr1
+	iny
+	lda     (sp),y
+	asl     a
+	asl     a
+	asl     a
+	asl     a
+L001C:	ora     ptr1
+L0014:	sta     $8002
+L000F:	ldy     #$01
+	clc
+	tya
+	adc     (sp),y
+	sta     (sp),y
+	dey
+	clc
+	lda     #$02
+	adc     (sp),y
+	jmp     L0015
+L0008:	ldy     #$08
+	lda     (sp),y
+	and     #$01
+	cmp     #$01
+	jsr     booleq
+	sta     ptr1
+	dey
+	lda     (sp),y
+	and     #$01
+	cmp     #$01
+	jsr     booleq
+	eor     ptr1
+	beq     L0019
+	ldy     #$01
+	lda     (sp),y
+	sta     $8000
+	lda     $8002
+	lsr     a
+	lsr     a
+	lsr     a
+	lsr     a
+	ldy     #$04
+	cmp     (sp),y
+	bne     L0018
+	lda     $8002
+	and     #$0F
+	sta     ptr1
+	iny
+	lda     (sp),y
+	asl     a
+	asl     a
+	asl     a
+	asl     a
+	ora     ptr1
+	sta     $8002
+L0018:	txa
+L0019:	sta     $7000
+	ldy     #$09
+	jmp     addysp
 
 .endproc
 
