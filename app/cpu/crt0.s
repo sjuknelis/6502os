@@ -21,7 +21,7 @@ _irq_int:
 _init:
   ; Serial print I
   lda #73
-  sta $8003
+  ;sta $8003
 
   ; Initialize stack pointer to $01FF
   ldx #$ff
@@ -52,6 +52,6 @@ _exit:
 
 .segment  "VECTORS"
 
-.addr _nmi_int  ; NMI vector
+.addr 0  ; NMI vector
 .addr _init     ; Reset vector
-.addr _irq_int  ; IRQ/BRK vector
+.addr 0  ; IRQ/BRK vector

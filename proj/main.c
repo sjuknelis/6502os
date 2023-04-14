@@ -1,6 +1,7 @@
-#include "tasks/tasks.h"
+//#include "tasks/tasks.h"
+#include "drivers/fs.h"
 
 void main() {
-  run_tasks();
-  //cmain();
+  //run_tasks();
+  fstest();
 }

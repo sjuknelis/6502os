@@ -1,0 +1,141 @@
+Modules list:
+-------------
+main.o:
+    CODE              Offs=000000  Size=000046  Align=00001  Fill=0000
+    RODATA            Offs=000000  Size=00000D  Align=00001  Fill=0000
+crt0.o:
+    STARTUP           Offs=000000  Size=000029  Align=00001  Fill=0000
+    VECTORS           Offs=000000  Size=000006  Align=00001  Fill=0000
+cpu/sbc.lib(addysp.o):
+    CODE              Offs=000046  Size=00000E  Align=00001  Fill=0000
+cpu/sbc.lib(condes.o):
+    CODE              Offs=000054  Size=00000C  Align=00001  Fill=0000
+    DATA              Offs=000000  Size=000025  Align=00001  Fill=0000
+    ONCE              Offs=000000  Size=00000C  Align=00001  Fill=0000
+cpu/sbc.lib(copydata.o):
+    CODE              Offs=000060  Size=00002D  Align=00001  Fill=0000
+cpu/sbc.lib(incsp3.o):
+    CODE              Offs=00008D  Size=000005  Align=00001  Fill=0000
+cpu/sbc.lib(ldaxsp.o):
+    CODE              Offs=000092  Size=000009  Align=00001  Fill=0000
+cpu/sbc.lib(pusha.o):
+    CODE              Offs=00009B  Size=000016  Align=00001  Fill=0000
+cpu/sbc.lib(pushax.o):
+    CODE              Offs=0000B1  Size=00001A  Align=00001  Fill=0000
+cpu/sbc.lib(zerobss.o):
+    CODE              Offs=0000CB  Size=000023  Align=00001  Fill=0000
+cpu/sbc.lib(zeropage.o):
+    ZEROPAGE          Offs=000000  Size=00001A  Align=00001  Fill=0000
+
+
+Segment list:
+-------------
+Name                   Start     End    Size  Align
+----------------------------------------------------
+ZEROPAGE              000000  000019  00001A  00001
+DATA                  000200  000224  000025  00001
+STARTUP               003025  00304D  000029  00001
+ONCE                  00304E  003059  00000C  00001
+CODE                  00305A  003147  0000EE  00001
+RODATA                003148  003154  00000D  00001
+VECTORS               005FFA  005FFF  000006  00001
+
+
+Exports list by name:
+---------------------
+__BSS_RUN__               000225 RLA    __BSS_SIZE__              000000 REA    
+__CONSTRUCTOR_COUNT__     000000 REA    __CONSTRUCTOR_TABLE__     00304E RLA    
+__DATA_LOAD__             003000 RLA    __DATA_RUN__              000200 RLA    
+__DATA_SIZE__             000025 REA    __DESTRUCTOR_COUNT__      000000 REA    
+__DESTRUCTOR_TABLE__      00304E RLA    __RAM_SIZE__              000D00 REA    
+__RAM_START__             000200 RLA    __STARTUP__               000001 REA    
+_main                     003096 RLA    addysp                    0030A1 RLA    
+copydata                  0030BA RLA    donelib                   0030AE RLA    
+incsp3                    0030E7 RLA    initlib                   00304E RLA    
+ldaxysp                   0030EE RLA    ptr1                      000008 RLZ    
+ptr2                      00000A RLZ    pusha                     0030F9 RLA    
+pushax                    00310F RLA    sp                        000000 RLZ    
+tmp1                      000010 RLZ    zerobss                   003125 RLA    
+
+
+
+Exports list by value:
+----------------------
+__BSS_SIZE__              000000 REA    __CONSTRUCTOR_COUNT__     000000 REA    
+sp                        000000 RLZ    __DESTRUCTOR_COUNT__      000000 REA    
+__STARTUP__               000001 REA    ptr1                      000008 RLZ    
+ptr2                      00000A RLZ    tmp1                      000010 RLZ    
+__DATA_SIZE__             000025 REA    __RAM_START__             000200 RLA    
+__DATA_RUN__              000200 RLA    __BSS_RUN__               000225 RLA    
+__RAM_SIZE__              000D00 REA    __DATA_LOAD__             003000 RLA    
+__DESTRUCTOR_TABLE__      00304E RLA    initlib                   00304E RLA    
+__CONSTRUCTOR_TABLE__     00304E RLA    _main                     003096 RLA    
+addysp                    0030A1 RLA    donelib                   0030AE RLA    
+copydata                  0030BA RLA    incsp3                    0030E7 RLA    
+ldaxysp                   0030EE RLA    pusha                     0030F9 RLA    
+pushax                    00310F RLA    zerobss                   003125 RLA    
+
+
+
+Imports list:
+-------------
+__BSS_RUN__ ([linker generated]):
+    zerobss.o                 common/zerobss.s:8
+__BSS_SIZE__ ([linker generated]):
+    zerobss.o                 common/zerobss.s:8
+__CONSTRUCTOR_COUNT__ ([linker generated]):
+    condes.o                  runtime/condes.s:18
+__CONSTRUCTOR_TABLE__ ([linker generated]):
+    condes.o                  runtime/condes.s:18
+__DATA_LOAD__ ([linker generated]):
+    copydata.o                common/copydata.s:8
+__DATA_RUN__ ([linker generated]):
+    copydata.o                common/copydata.s:8
+__DATA_SIZE__ ([linker generated]):
+    copydata.o                common/copydata.s:8
+__DESTRUCTOR_COUNT__ ([linker generated]):
+    condes.o                  runtime/condes.s:19
+__DESTRUCTOR_TABLE__ ([linker generated]):
+    condes.o                  runtime/condes.s:19
+__RAM_SIZE__ ([linker generated]):
+    crt0.o                    cpu/crt0.s:7
+__RAM_START__ ([linker generated]):
+    crt0.o                    cpu/crt0.s:7
+__STARTUP__ (crt0.o):
+    main.o                    code/main.s:13
+_main (main.o):
+    crt0.o                    cpu/crt0.s:4
+addysp (addysp.o):
+    incsp3.o                  runtime/incsp3.s:8
+copydata (copydata.o):
+    crt0.o                    cpu/crt0.s:9
+donelib (condes.o):
+    crt0.o                    cpu/crt0.s:9
+incsp3 (incsp3.o):
+    main.o                    code/main.s:79
+initlib (condes.o):
+    crt0.o                    cpu/crt0.s:9
+ldaxysp (ldaxsp.o):
+    main.o                    code/main.s:79
+ptr1 (zeropage.o):
+    zerobss.o                 common/zerobss.s:9
+    copydata.o                common/copydata.s:9
+    main.o                    code/main.s:11
+ptr2 (zeropage.o):
+    copydata.o                common/copydata.s:9
+pusha (pusha.o):
+    main.o                    code/main.s:79
+pushax (pushax.o):
+    main.o                    code/main.s:79
+sp (zeropage.o):
+    addysp.o                  runtime/addysp.s:8
+    pushax.o                  runtime/pushax.s:8
+    pusha.o                   runtime/pusha.s:8
+    ldaxsp.o                  runtime/ldaxsp.s:8
+    crt0.o                    /Users/simas/cc65-master/asminc/zeropage.inc:11
+    main.o                    code/main.s:10
+tmp1 (zeropage.o):
+    copydata.o                common/copydata.s:9
+zerobss (zerobss.o):
+    crt0.o                    cpu/crt0.s:9
+

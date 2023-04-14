@@ -11,7 +11,7 @@
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
 	.forceimport	__STARTUP__
-	.import		_run_tasks
+	.import		_fstest
 	.export		_main
 
 ; ---------------------------------------------------------------
@@ -24,7 +24,7 @@
 
 .segment	"CODE"
 
-	jmp     _run_tasks
+	jmp     _fstest
 
 .endproc
 

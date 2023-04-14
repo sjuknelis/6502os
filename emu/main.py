@@ -1,6 +1,7 @@
 import sys,array,time
 from cpu import CPU
 from mmu import MMU
+from hdd import read_hdd_page
 
 logging = "logging" in sys.argv
 frame_logging = "frame" in sys.argv
@@ -37,7 +38,7 @@ def io_write(index,value):
     if logging:
         print("io",hex(index),hex(value))
 
-    global screen_matrix,screen_matrix_pointer,key_down,mouse_impulse
+    global screen_matrix,screen_matrix_pointer,key_down,mouse_impulse,mmu
 
     if index == 0:
         # Screen lo
@@ -55,6 +56,8 @@ def io_write(index,value):
     elif index == 7:
         key_down = 0
         mouse_impulse = False
+    elif index == 8:
+        read_hdd_page(mmu,value)
 
 def io_read(index):
     if index == 2:
@@ -75,6 +78,8 @@ rom_image = open("a.out","rb").read()
 mmu = MMU(rom_image,io_write,io_read,logging)
 cpu = CPU(mmu,logging=logging)
 cpu.r.pc = cpu.interruptAddress("RESET")
+
+read_hdd_page(mmu,0)
 
 try:
     while True:
