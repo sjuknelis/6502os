@@ -1,15 +1,17 @@
 #include "context.h"
+#include "../drivers/fs.h"
 #include "../drivers/graphics.h"
 #include "../drivers/serial.h"
 #include "../stdlib/syscall.h"
 #include "../runnable/shell.h"
 #include "../runnable/calculator.h"
+#include "../runnable/explorer.h"
 
 #define TASK_JUMP_LO  *(char*) 0x7ff0
 #define TASK_JUMP_HI  *(char*) 0x7ff1
 #define NMI_DETECT    *(char*) 0x7ff3
 
-#define TASK_COUNT    8
+#define TASK_COUNT    3
 
 typedef struct {
   char running;
@@ -46,16 +48,6 @@ void process_syscalls(char task) {
       // Sleep
       tasks[task].sleeping = table[i + 1] | (table[i + 2] << 8);
       i += 3;
-    } else if ( table[i] == 0x04 ) {
-      // Init flash
-      init_task(flash_index,flashing);
-      flash_index++;
-      i += 1;
-    } else if ( table[i] == 0x05 ) {
-      tasks[2].running = 0;
-      tasks[3].running = 0;
-      flash_index = 2;
-      i += 1;
     }
   }
 }
@@ -66,11 +58,14 @@ void process_syscalls(char task) {
 void run_tasks() {
   char i,j;
   char task_run = 0;
-  //init_task(1,cmain);
-  //init_task(2,flashing);
+  init_task(1,emain);
   while ( 1 ) {
     task_run = 0;
     for ( i = 1; i < TASK_COUNT; i++ ) {
+      if ( (*(char*) 0x800a) == 0xff ) {
+        (*(char*) 0x800a) = 0;
+        init_task(2,exec);
+      }
       if ( tasks[i].running && tasks[i].sleeping == 0 ) {
         continue_task(i);
         process_syscalls(i);
@@ -86,16 +81,6 @@ void run_tasks() {
       for ( i = 1; i < TASK_COUNT; i++ ) {
         if ( tasks[i].sleeping != 0 ) tasks[i].sleeping--;
       }
-    }
-    krectangle(0,10,0,10,4);
-    if ( MOUSE_X <= 10 && MOUSE_Y <= 10 ) {
-      if ( ! flash_triggered ) {
-        flash_triggered = 1;
-        init_task(flash_index,cmain);
-        flash_index++;
-      }
-    } else {
-      flash_triggered = 0;
     }
   }
 }

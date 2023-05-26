@@ -3,5 +3,6 @@
 
 void run_tasks();
 void init_task(char mb,void* func);
+void start_exec();
 
 #endif

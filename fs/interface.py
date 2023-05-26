@@ -111,7 +111,11 @@ class HDD:
         break
     
 hdd = HDD()
-while True:
+hdd.add_file("../textedit/a.out","edit")
+hdd.add_file("test.c","test")
+hdd.export_hdd()
+
+"""while True:
   command_text = input("> ").split(" ")
   command = command_text[0]
   params = command_text[1:]
@@ -125,4 +129,4 @@ while True:
     hdd.add_file(params[0],params[1])
     print(f"Added {params[0]} as {params[1]}")
   elif command == "exit":
-    break
+    break"""

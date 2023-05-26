@@ -19,8 +19,8 @@ _irq_int:
   jmp _irq_int
 
 _init:
-  ; Serial print I
-  lda #73
+  ; Serial print J
+  lda #74
   sta $8003
 
   ; Initialize stack pointer to $01FF
@@ -43,7 +43,6 @@ _init:
 
   ; Call main()
   jsr _main
-  jmp $302d
 
 _exit:
   ; Back from main (this is also the _exit entry)

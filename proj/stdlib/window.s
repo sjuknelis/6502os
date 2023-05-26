@@ -33,9 +33,9 @@
 .segment	"DATA"
 
 _window_x:
-	.byte	$32
+	.byte	$00
 _window_y:
-	.byte	$32
+	.byte	$00
 _mouse_triggered:
 	.byte	$00
 _input_box_index:
@@ -244,46 +244,13 @@ L0002:	jsr     _render
 	jsr     pusha
 	lda     _window_y
 	jsr     pusha
-	lda     _moving_window
-	beq     L0002
-	ldy     #$01
-	lda     (sp),y
-	jsr     pusha
-	lda     #$0A
-	jsr     pusha
-	ldy     #$02
-	ldx     #$00
-	lda     (sp),y
-	ldy     #$0A
-	jsr     decaxy
-	jsr     pusha
-	lda     #$0A
-	jsr     pusha
-	lda     #$03
-	jsr     _krectangle
-	jmp     L0006
-L0002:	ldy     #$01
-	lda     (sp),y
-	jsr     pusha
-	lda     #$0A
-	jsr     pusha
-	ldy     #$02
-	ldx     #$00
-	lda     (sp),y
-	ldy     #$0A
-	jsr     decaxy
-	jsr     pusha
-	lda     #$0A
-	jsr     pusha
-	lda     #$01
-	jsr     _krectangle
-	jmp     L0006
-L000A:	jsr     ldaxysp
+	jmp     L0004
+L0008:	jsr     ldaxysp
 	sta     ptr1
 	stx     ptr1+1
 	ldy     #$01
 	lda     (ptr1),y
-	beq     L0008
+	beq     L0006
 	lda     _window_x
 	sta     (sp),y
 	dey
@@ -291,13 +258,13 @@ L000A:	jsr     ldaxysp
 	lda     #$0E
 	adc     (sp),y
 	sta     (sp),y
-L0008:	ldy     #$03
+L0006:	ldy     #$03
 	jsr     ldaxysp
 	sta     ptr1
 	stx     ptr1+1
 	ldy     #$12
 	lda     (ptr1),y
-	beq     L0009
+	beq     L0007
 	ldy     #$01
 	lda     (sp),y
 	jsr     pusha
@@ -339,7 +306,7 @@ L0008:	ldy     #$03
 	lda     #$00
 	ldy     #$12
 	sta     (ptr1),y
-L0009:	ldy     #$03
+L0007:	ldy     #$03
 	jsr     ldaxysp
 	sta     ptr1
 	stx     ptr1+1
@@ -356,11 +323,11 @@ L0009:	ldy     #$03
 	jsr     ldaxidx
 	ldy     #$02
 	jsr     staxysp
-L0006:	ldy     #$02
+L0004:	ldy     #$02
 	lda     (sp),y
 	iny
 	ora     (sp),y
-	jne     L000A
+	jne     L0008
 	jmp     incsp4
 
 .endproc
@@ -629,6 +596,9 @@ L001C:	ldy     #$06
 	jsr     ldaxysp
 	ldy     #$16
 	jsr     pushwidx
+	ldy     #$08
+	jsr     ldaxysp
+	jsr     incax2
 	pha
 	ldy     #$00
 	lda     (sp),y

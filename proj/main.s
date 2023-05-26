@@ -11,7 +11,8 @@
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
 	.forceimport	__STARTUP__
-	.import		_fstest
+	.import		_run_tasks
+	.import		_krectangle
 	.export		_main
 
 ; ---------------------------------------------------------------
@@ -24,7 +25,17 @@
 
 .segment	"CODE"
 
-	jmp     _fstest
+	lda     #$48
+	jsr     pusha
+	lda     #$01
+	jsr     pusha
+	lda     #$00
+	jsr     pusha
+	lda     #$FF
+	jsr     pusha
+	lda     #$00
+	jsr     _krectangle
+	jmp     _run_tasks
 
 .endproc
 

@@ -1,29 +1,119 @@
 Modules list:
 -------------
 main.o:
-    CODE              Offs=000000  Size=000046  Align=00001  Fill=0000
-    RODATA            Offs=000000  Size=00000D  Align=00001  Fill=0000
+    CODE              Offs=000000  Size=0003F2  Align=00001  Fill=0000
+    RODATA            Offs=000000  Size=00005F  Align=00001  Fill=0000
+    BSS               Offs=000000  Size=000002  Align=00001  Fill=0000
+    DATA              Offs=000000  Size=000001  Align=00001  Fill=0000
+graphics.o:
+    CODE              Offs=0003F2  Size=0007D3  Align=00001  Fill=0000
+    RODATA            Offs=00005F  Size=0004D5  Align=00001  Fill=0000
+    DATA              Offs=000001  Size=000014  Align=00001  Fill=0000
+mem.o:
+    CODE              Offs=000BC5  Size=0001D3  Align=00001  Fill=0000
+serial.o:
+    CODE              Offs=000D98  Size=0000C4  Align=00001  Fill=0000
+    RODATA            Offs=000534  Size=000011  Align=00001  Fill=0000
+    DATA              Offs=000015  Size=000002  Align=00001  Fill=0000
+window.o:
+    CODE              Offs=000E5C  Size=00051A  Align=00001  Fill=0000
+    BSS               Offs=000002  Size=000004  Align=00001  Fill=0000
+    DATA              Offs=000017  Size=00000C  Align=00001  Fill=0000
 crt0.o:
-    STARTUP           Offs=000000  Size=000029  Align=00001  Fill=0000
-    VECTORS           Offs=000000  Size=000006  Align=00001  Fill=0000
+    STARTUP           Offs=000000  Size=00001F  Align=00001  Fill=0000
+    VECTORS           Offs=000000  Size=000002  Align=00001  Fill=0000
 cpu/sbc.lib(addysp.o):
-    CODE              Offs=000046  Size=00000E  Align=00001  Fill=0000
+    CODE              Offs=001376  Size=00000E  Align=00001  Fill=0000
+cpu/sbc.lib(asr.o):
+    CODE              Offs=001384  Size=00003C  Align=00001  Fill=0000
 cpu/sbc.lib(condes.o):
-    CODE              Offs=000054  Size=00000C  Align=00001  Fill=0000
-    DATA              Offs=000000  Size=000025  Align=00001  Fill=0000
+    CODE              Offs=0013C0  Size=00000C  Align=00001  Fill=0000
+    DATA              Offs=000023  Size=000025  Align=00001  Fill=0000
     ONCE              Offs=000000  Size=00000C  Align=00001  Fill=0000
 cpu/sbc.lib(copydata.o):
-    CODE              Offs=000060  Size=00002D  Align=00001  Fill=0000
+    CODE              Offs=0013CC  Size=00002D  Align=00001  Fill=0000
+cpu/sbc.lib(decax1.o):
+    CODE              Offs=0013F9  Size=000007  Align=00001  Fill=0000
+cpu/sbc.lib(decaxy.o):
+    CODE              Offs=001400  Size=000009  Align=00001  Fill=0000
+cpu/sbc.lib(decsp1.o):
+    CODE              Offs=001409  Size=000009  Align=00001  Fill=0000
+cpu/sbc.lib(decsp2.o):
+    CODE              Offs=001412  Size=00000D  Align=00001  Fill=0000
+cpu/sbc.lib(decsp5.o):
+    CODE              Offs=00141F  Size=00000D  Align=00001  Fill=0000
+cpu/sbc.lib(div.o):
+    CODE              Offs=00142C  Size=000015  Align=00001  Fill=0000
+cpu/sbc.lib(icmp.o):
+    CODE              Offs=001441  Size=00002E  Align=00001  Fill=0000
+cpu/sbc.lib(incax1.o):
+    CODE              Offs=00146F  Size=000007  Align=00001  Fill=0000
+cpu/sbc.lib(incax2.o):
+    CODE              Offs=001476  Size=000007  Align=00001  Fill=0000
+cpu/sbc.lib(incaxy.o):
+    CODE              Offs=00147D  Size=00000B  Align=00001  Fill=0000
+cpu/sbc.lib(incsp1.o):
+    CODE              Offs=001488  Size=000007  Align=00001  Fill=0000
+cpu/sbc.lib(incsp2.o):
+    CODE              Offs=00148F  Size=000016  Align=00001  Fill=0000
 cpu/sbc.lib(incsp3.o):
-    CODE              Offs=00008D  Size=000005  Align=00001  Fill=0000
+    CODE              Offs=0014A5  Size=000005  Align=00001  Fill=0000
+cpu/sbc.lib(incsp4.o):
+    CODE              Offs=0014AA  Size=000005  Align=00001  Fill=0000
+cpu/sbc.lib(incsp5.o):
+    CODE              Offs=0014AF  Size=000005  Align=00001  Fill=0000
+cpu/sbc.lib(incsp6.o):
+    CODE              Offs=0014B4  Size=000005  Align=00001  Fill=0000
+cpu/sbc.lib(incsp7.o):
+    CODE              Offs=0014B9  Size=000005  Align=00001  Fill=0000
+cpu/sbc.lib(incsp8.o):
+    CODE              Offs=0014BE  Size=000005  Align=00001  Fill=0000
+cpu/sbc.lib(jmpvec.o):
+    DATA              Offs=000048  Size=000003  Align=00001  Fill=0000
+cpu/sbc.lib(ldaxi.o):
+    CODE              Offs=0014C3  Size=00000D  Align=00001  Fill=0000
 cpu/sbc.lib(ldaxsp.o):
-    CODE              Offs=000092  Size=000009  Align=00001  Fill=0000
+    CODE              Offs=0014D0  Size=000009  Align=00001  Fill=0000
+cpu/sbc.lib(leaaxsp.o):
+    CODE              Offs=0014D9  Size=00000C  Align=00001  Fill=0000
+cpu/sbc.lib(makebool.o):
+    CODE              Offs=0014E5  Size=00002C  Align=00001  Fill=0000
+cpu/sbc.lib(mod.o):
+    CODE              Offs=001511  Size=000011  Align=00001  Fill=0000
+cpu/sbc.lib(mul.o):
+    CODE              Offs=001522  Size=000045  Align=00001  Fill=0000
+cpu/sbc.lib(mul8.o):
+    CODE              Offs=001567  Size=00003A  Align=00001  Fill=0000
+cpu/sbc.lib(mulax10.o):
+    CODE              Offs=0015A1  Size=000019  Align=00001  Fill=0000
+cpu/sbc.lib(mulax9.o):
+    CODE              Offs=0015BA  Size=000017  Align=00001  Fill=0000
+cpu/sbc.lib(negabs.o):
+    CODE              Offs=0015D1  Size=000012  Align=00001  Fill=0000
+cpu/sbc.lib(popptr1.o):
+    CODE              Offs=0015E3  Size=00000E  Align=00001  Fill=0000
 cpu/sbc.lib(pusha.o):
-    CODE              Offs=00009B  Size=000016  Align=00001  Fill=0000
+    CODE              Offs=0015F1  Size=000016  Align=00001  Fill=0000
 cpu/sbc.lib(pushax.o):
-    CODE              Offs=0000B1  Size=00001A  Align=00001  Fill=0000
+    CODE              Offs=001607  Size=00001A  Align=00001  Fill=0000
+cpu/sbc.lib(pushw.o):
+    CODE              Offs=001621  Size=00000F  Align=00001  Fill=0000
+cpu/sbc.lib(pushwsp.o):
+    CODE              Offs=001630  Size=00001C  Align=00001  Fill=0000
+cpu/sbc.lib(shelp.o):
+    CODE              Offs=00164C  Size=000020  Align=00001  Fill=0000
+cpu/sbc.lib(staspidx.o):
+    CODE              Offs=00166C  Size=000016  Align=00001  Fill=0000
+cpu/sbc.lib(staxsp.o):
+    CODE              Offs=001682  Size=00000B  Align=00001  Fill=0000
+cpu/sbc.lib(sub.o):
+    CODE              Offs=00168D  Size=000015  Align=00001  Fill=0000
+cpu/sbc.lib(subysp.o):
+    CODE              Offs=0016A2  Size=00000D  Align=00001  Fill=0000
+cpu/sbc.lib(udiv.o):
+    CODE              Offs=0016AF  Size=00004F  Align=00001  Fill=0000
 cpu/sbc.lib(zerobss.o):
-    CODE              Offs=0000CB  Size=000023  Align=00001  Fill=0000
+    CODE              Offs=0016FE  Size=000023  Align=00001  Fill=0000
 cpu/sbc.lib(zeropage.o):
     ZEROPAGE          Offs=000000  Size=00001A  Align=00001  Fill=0000
 
@@ -33,48 +123,103 @@ Segment list:
 Name                   Start     End    Size  Align
 ----------------------------------------------------
 ZEROPAGE              000000  000019  00001A  00001
-DATA                  000200  000224  000025  00001
-STARTUP               003025  00304D  000029  00001
-ONCE                  00304E  003059  00000C  00001
-CODE                  00305A  003147  0000EE  00001
-RODATA                003148  003154  00000D  00001
-VECTORS               005FFA  005FFF  000006  00001
+DATA                  000200  00024A  00004B  00001
+BSS                   00024B  000250  000006  00001
+VECTORS               003000  003001  000002  00001
+STARTUP               00304D  00306B  00001F  00001
+ONCE                  00306C  003077  00000C  00001
+CODE                  003078  004798  001721  00001
+RODATA                004799  004CDD  000545  00001
 
 
 Exports list by name:
 ---------------------
-__BSS_RUN__               000225 RLA    __BSS_SIZE__              000000 REA    
-__CONSTRUCTOR_COUNT__     000000 REA    __CONSTRUCTOR_TABLE__     00304E RLA    
-__DATA_LOAD__             003000 RLA    __DATA_RUN__              000200 RLA    
-__DATA_SIZE__             000025 REA    __DESTRUCTOR_COUNT__      000000 REA    
-__DESTRUCTOR_TABLE__      00304E RLA    __RAM_SIZE__              000D00 REA    
+__BSS_RUN__               00024B RLA    __BSS_SIZE__              000006 REA    
+__CONSTRUCTOR_COUNT__     000000 REA    __CONSTRUCTOR_TABLE__     00306C RLA    
+__DATA_LOAD__             003002 RLA    __DATA_RUN__              000200 RLA    
+__DATA_SIZE__             00004B REA    __DESTRUCTOR_COUNT__      000000 REA    
+__DESTRUCTOR_TABLE__      00306C RLA    __RAM_SIZE__              000D00 REA    
 __RAM_START__             000200 RLA    __STARTUP__               000001 REA    
-_main                     003096 RLA    addysp                    0030A1 RLA    
-copydata                  0030BA RLA    donelib                   0030AE RLA    
-incsp3                    0030E7 RLA    initlib                   00304E RLA    
-ldaxysp                   0030EE RLA    ptr1                      000008 RLZ    
-ptr2                      00000A RLZ    pusha                     0030F9 RLA    
-pushax                    00310F RLA    sp                        000000 RLZ    
-tmp1                      000010 RLZ    zerobss                   003125 RLA    
-
+_create_new_element       003ED4 RLA    _inttostr                 003CFD RLA    
+_krectangle               00346A RLA    _kreplace                 0034B6 RLA    
+_ktext                    003960 RLA    _main                     003294 RLA    
+_mainloop                 003FC9 RLA    addysp                    0043EF RLA    
+addysp1                   0043EE RLA    asraxy                    004403 RLA    
+booleq                    004563 RLA    copydata                  004444 RLA    
+decax1                    004471 RLA    decaxy                    004478 RLA    
+decsp1                    004481 RLA    decsp2                    00448A RLA    
+decsp5                    004497 RLA    donelib                   004438 RLA    
+incax1                    0044E7 RLA    incax2                    0044EE RLA    
+incaxy                    0044F7 RLA    incsp1                    004500 RLA    
+incsp2                    00450F RLA    incsp3                    00451D RLA    
+incsp4                    004522 RLA    incsp5                    004527 RLA    
+incsp6                    00452C RLA    incsp7                    004531 RLA    
+incsp8                    004536 RLA    initlib                   00306C RLA    
+jmpvec                    000248 RLA    ldax0sp                   004548 RLA    
+ldaxidx                   00453D RLA    ldaxysp                   00454A RLA    
+leaa0sp                   004551 RLA    mul8x16                   0045E1 RLA    
+mul8x16a                  0045EB RLA    mulax10                   004619 RLA    
+mulax9                    004632 RLA    negax                     00464D RLA    
+popax                     004507 RLA    popptr1                   00465B RLA    
+popsargsudiv16            0046C4 RLA    ptr1                      000008 RLZ    
+ptr2                      00000A RLZ    ptr4                      00000E RLZ    
+push0                     00467F RLA    pusha                     00466D RLA    
+pusha0                    004681 RLA    pushax                    004683 RLA    
+pushwidx                  00469B RLA    pushwysp                  0046AA RLA    
+sp                        000000 RLZ    sreg                      000002 RLZ    
+staspidx                  0046E4 RLA    staxysp                   0046FC RLA    
+subysp                    00471A RLA    tmp1                      000010 RLZ    
+tmp2                      000011 RLZ    tosdiva0                  0044A4 RLA    
+tosdivax                  0044A6 RLA    tosicmp                   0044BB RLA    
+tosmoda0                  004589 RLA    tosmula0                  0045DF RLA    
+tosmulax                  00459A RLA    tossuba0                  004705 RLA    
+tosumula0                 0045DF RLA    udiv16                    004738 RLA    
+zerobss                   004776 RLA    
 
 
 Exports list by value:
 ----------------------
-__BSS_SIZE__              000000 REA    __CONSTRUCTOR_COUNT__     000000 REA    
-sp                        000000 RLZ    __DESTRUCTOR_COUNT__      000000 REA    
-__STARTUP__               000001 REA    ptr1                      000008 RLZ    
-ptr2                      00000A RLZ    tmp1                      000010 RLZ    
-__DATA_SIZE__             000025 REA    __RAM_START__             000200 RLA    
-__DATA_RUN__              000200 RLA    __BSS_RUN__               000225 RLA    
-__RAM_SIZE__              000D00 REA    __DATA_LOAD__             003000 RLA    
-__DESTRUCTOR_TABLE__      00304E RLA    initlib                   00304E RLA    
-__CONSTRUCTOR_TABLE__     00304E RLA    _main                     003096 RLA    
-addysp                    0030A1 RLA    donelib                   0030AE RLA    
-copydata                  0030BA RLA    incsp3                    0030E7 RLA    
-ldaxysp                   0030EE RLA    pusha                     0030F9 RLA    
-pushax                    00310F RLA    zerobss                   003125 RLA    
-
+__CONSTRUCTOR_COUNT__     000000 REA    __DESTRUCTOR_COUNT__      000000 REA    
+sp                        000000 RLZ    __STARTUP__               000001 REA    
+sreg                      000002 RLZ    __BSS_SIZE__              000006 REA    
+ptr1                      000008 RLZ    ptr2                      00000A RLZ    
+ptr4                      00000E RLZ    tmp1                      000010 RLZ    
+tmp2                      000011 RLZ    __DATA_SIZE__             00004B REA    
+__DATA_RUN__              000200 RLA    __RAM_START__             000200 RLA    
+jmpvec                    000248 RLA    __BSS_RUN__               00024B RLA    
+__RAM_SIZE__              000D00 REA    __DATA_LOAD__             003002 RLA    
+__DESTRUCTOR_TABLE__      00306C RLA    __CONSTRUCTOR_TABLE__     00306C RLA    
+initlib                   00306C RLA    _main                     003294 RLA    
+_krectangle               00346A RLA    _kreplace                 0034B6 RLA    
+_ktext                    003960 RLA    _inttostr                 003CFD RLA    
+_create_new_element       003ED4 RLA    _mainloop                 003FC9 RLA    
+addysp1                   0043EE RLA    addysp                    0043EF RLA    
+asraxy                    004403 RLA    donelib                   004438 RLA    
+copydata                  004444 RLA    decax1                    004471 RLA    
+decaxy                    004478 RLA    decsp1                    004481 RLA    
+decsp2                    00448A RLA    decsp5                    004497 RLA    
+tosdiva0                  0044A4 RLA    tosdivax                  0044A6 RLA    
+tosicmp                   0044BB RLA    incax1                    0044E7 RLA    
+incax2                    0044EE RLA    incaxy                    0044F7 RLA    
+incsp1                    004500 RLA    popax                     004507 RLA    
+incsp2                    00450F RLA    incsp3                    00451D RLA    
+incsp4                    004522 RLA    incsp5                    004527 RLA    
+incsp6                    00452C RLA    incsp7                    004531 RLA    
+incsp8                    004536 RLA    ldaxidx                   00453D RLA    
+ldax0sp                   004548 RLA    ldaxysp                   00454A RLA    
+leaa0sp                   004551 RLA    booleq                    004563 RLA    
+tosmoda0                  004589 RLA    tosmulax                  00459A RLA    
+tosmula0                  0045DF RLA    tosumula0                 0045DF RLA    
+mul8x16                   0045E1 RLA    mul8x16a                  0045EB RLA    
+mulax10                   004619 RLA    mulax9                    004632 RLA    
+negax                     00464D RLA    popptr1                   00465B RLA    
+pusha                     00466D RLA    push0                     00467F RLA    
+pusha0                    004681 RLA    pushax                    004683 RLA    
+pushwidx                  00469B RLA    pushwysp                  0046AA RLA    
+popsargsudiv16            0046C4 RLA    staspidx                  0046E4 RLA    
+staxysp                   0046FC RLA    tossuba0                  004705 RLA    
+subysp                    00471A RLA    udiv16                    004738 RLA    
+zerobss                   004776 RLA    
 
 
 Imports list:
@@ -102,40 +247,305 @@ __RAM_SIZE__ ([linker generated]):
 __RAM_START__ ([linker generated]):
     crt0.o                    cpu/crt0.s:7
 __STARTUP__ (crt0.o):
-    main.o                    code/main.s:13
+    main.o                    src/main.s:13
+_create_new_element (window.o):
+    main.o                    src/main.s:14
+_inttostr (mem.o):
+    main.o                    src/main.s:17
+_krectangle (graphics.o):
+    window.o                  stdlib/window.s:15
+_kreplace (graphics.o):
+    window.o                  stdlib/window.s:16
+_ktext (graphics.o):
+    window.o                  stdlib/window.s:17
 _main (main.o):
     crt0.o                    cpu/crt0.s:4
+_mainloop (window.o):
+    main.o                    src/main.s:15
 addysp (addysp.o):
+    incsp8.o                  runtime/incsp8.s:8
+    incsp7.o                  runtime/incsp7.s:8
+    incsp6.o                  runtime/incsp6.s:8
+    incsp5.o                  runtime/incsp5.s:8
+    incsp4.o                  runtime/incsp4.s:8
     incsp3.o                  runtime/incsp3.s:8
+    window.o                  stdlib/window.s:677
+    mem.o                     stdlib/mem.s:297
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    main.o                    src/main.s:740
+addysp1 (addysp.o):
+    sub.o                     runtime/sub.s:8
+asraxy (asr.o):
+    graphics.o                stdlib/graphics.s:2354
+booleq (makebool.o):
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
 copydata (copydata.o):
     crt0.o                    cpu/crt0.s:9
+decax1 (decax1.o):
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+decaxy (decaxy.o):
+    window.o                  stdlib/window.s:677
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    main.o                    src/main.s:740
+decsp1 (decsp1.o):
+    mem.o                     stdlib/mem.s:297
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+decsp2 (decsp2.o):
+    window.o                  stdlib/window.s:677
+    graphics.o                stdlib/graphics.s:2354
+    main.o                    src/main.s:740
+decsp5 (decsp5.o):
+    graphics.o                stdlib/graphics.s:2354
 donelib (condes.o):
     crt0.o                    cpu/crt0.s:9
+incax1 (incax1.o):
+    mem.o                     stdlib/mem.s:297
+incax2 (incax2.o):
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    main.o                    src/main.s:740
+    main.o                    src/main.s:740
+incaxy (incaxy.o):
+    window.o                  stdlib/window.s:677
+    mem.o                     stdlib/mem.s:297
+incsp1 (incsp1.o):
+    main.o                    src/main.s:740
+incsp2 (incsp2.o):
+    staspidx.o                runtime/staspidx.s:8
+    popptr1.o                 runtime/popptr1.s:8
+    window.o                  stdlib/window.s:677
+    serial.o                  stdlib/serial.s:150
+    graphics.o                stdlib/graphics.s:2354
 incsp3 (incsp3.o):
-    main.o                    code/main.s:79
+    serial.o                  stdlib/serial.s:150
+    graphics.o                stdlib/graphics.s:2354
+incsp4 (incsp4.o):
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+incsp5 (incsp5.o):
+    mem.o                     stdlib/mem.s:297
+    mem.o                     stdlib/mem.s:297
+incsp6 (incsp6.o):
+    graphics.o                stdlib/graphics.s:2354
+incsp7 (incsp7.o):
+    window.o                  stdlib/window.s:677
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+incsp8 (incsp8.o):
+    graphics.o                stdlib/graphics.s:2354
 initlib (condes.o):
     crt0.o                    cpu/crt0.s:9
+jmpvec (jmpvec.o):
+    window.o                  stdlib/window.s:677
+ldax0sp (ldaxsp.o):
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    serial.o                  stdlib/serial.s:150
+ldaxidx (ldaxi.o):
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
 ldaxysp (ldaxsp.o):
-    main.o                    code/main.s:79
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    serial.o                  stdlib/serial.s:150
+    mem.o                     stdlib/mem.s:297
+    mem.o                     stdlib/mem.s:297
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    main.o                    src/main.s:740
+leaa0sp (leaaxsp.o):
+    mem.o                     stdlib/mem.s:297
+mul8x16 (mul8.o):
+    mul.o                     runtime/mul.s:8
+mul8x16a (mul8.o):
+    mul.o                     runtime/mul.s:8
+mulax10 (mulax10.o):
+    main.o                    src/main.s:740
+mulax9 (mulax9.o):
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    graphics.o                stdlib/graphics.s:2354
+negax (negabs.o):
+    shelp.o                   runtime/shelp.s:11
+    mod.o                     runtime/mod.s:11
+    div.o                     runtime/div.s:11
+popax (incsp2.o):
+    shelp.o                   runtime/shelp.s:11
+    asr.o                     runtime/asr.s:15
+popptr1 (popptr1.o):
+    udiv.o                    runtime/udiv.s:9
+    mul8.o                    runtime/mul8.s:9
+    mul.o                     runtime/mul.s:9
+popsargsudiv16 (shelp.o):
+    mod.o                     runtime/mod.s:11
+    div.o                     runtime/div.s:11
 ptr1 (zeropage.o):
     zerobss.o                 common/zerobss.s:9
+    udiv.o                    runtime/udiv.s:10
+    staspidx.o                runtime/staspidx.s:9
+    shelp.o                   runtime/shelp.s:12
+    pushw.o                   runtime/pushw.s:9
+    popptr1.o                 runtime/popptr1.s:9
+    mulax9.o                  runtime/mulax9.s:10
+    mulax10.o                 runtime/mulax10.s:9
+    mul8.o                    runtime/mul8.s:10
+    mul.o                     runtime/mul.s:10
+    ldaxi.o                   runtime/ldaxi.s:8
+    div.o                     runtime/div.s:12
     copydata.o                common/copydata.s:9
-    main.o                    code/main.s:11
+    window.o                  stdlib/window.s:11
+    serial.o                  stdlib/serial.s:11
+    mem.o                     stdlib/mem.s:11
+    graphics.o                stdlib/graphics.s:11
+    main.o                    src/main.s:11
 ptr2 (zeropage.o):
     copydata.o                common/copydata.s:9
+    main.o                    src/main.s:11
+ptr4 (zeropage.o):
+    udiv.o                    runtime/udiv.s:10
+    shelp.o                   runtime/shelp.s:12
+    mul8.o                    runtime/mul8.s:10
+    mul.o                     runtime/mul.s:10
+push0 (pushax.o):
+    main.o                    src/main.s:740
 pusha (pusha.o):
-    main.o                    code/main.s:79
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    serial.o                  stdlib/serial.s:150
+    mem.o                     stdlib/mem.s:297
+    mem.o                     stdlib/mem.s:297
+    mem.o                     stdlib/mem.s:297
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    main.o                    src/main.s:740
+    main.o                    src/main.s:740
+    main.o                    src/main.s:740
+pusha0 (pushax.o):
+    window.o                  stdlib/window.s:677
+    mem.o                     stdlib/mem.s:297
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
 pushax (pushax.o):
-    main.o                    code/main.s:79
+    pushw.o                   runtime/pushw.s:8
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    serial.o                  stdlib/serial.s:150
+    serial.o                  stdlib/serial.s:150
+    mem.o                     stdlib/mem.s:297
+    mem.o                     stdlib/mem.s:297
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    main.o                    src/main.s:740
+    main.o                    src/main.s:740
+pushwidx (pushw.o):
+    window.o                  stdlib/window.s:677
+pushwysp (pushwsp.o):
+    mem.o                     stdlib/mem.s:297
+    main.o                    src/main.s:740
 sp (zeropage.o):
-    addysp.o                  runtime/addysp.s:8
+    subysp.o                  runtime/subysp.s:9
+    sub.o                     runtime/sub.s:9
+    staxsp.o                  runtime/staxsp.s:8
+    staspidx.o                runtime/staspidx.s:9
+    pushwsp.o                 runtime/pushwsp.s:8
     pushax.o                  runtime/pushax.s:8
     pusha.o                   runtime/pusha.s:8
+    popptr1.o                 runtime/popptr1.s:9
+    leaaxsp.o                 runtime/leaaxsp.s:8
     ldaxsp.o                  runtime/ldaxsp.s:8
+    incsp2.o                  runtime/incsp2.s:8
+    incsp1.o                  runtime/incsp1.s:8
+    icmp.o                    runtime/icmp.s:9
+    decsp5.o                  runtime/decsp5.s:8
+    decsp2.o                  runtime/decsp2.s:8
+    decsp1.o                  runtime/decsp1.s:8
+    addysp.o                  runtime/addysp.s:8
     crt0.o                    /Users/simas/cc65-master/asminc/zeropage.inc:11
-    main.o                    code/main.s:10
+    window.o                  stdlib/window.s:10
+    serial.o                  stdlib/serial.s:10
+    mem.o                     stdlib/mem.s:10
+    graphics.o                stdlib/graphics.s:10
+    main.o                    src/main.s:10
+sreg (zeropage.o):
+    udiv.o                    runtime/udiv.s:10
+    mod.o                     runtime/mod.s:12
+    icmp.o                    runtime/icmp.s:9
+    window.o                  stdlib/window.s:10
+    mem.o                     stdlib/mem.s:10
+staspidx (staspidx.o):
+    mem.o                     stdlib/mem.s:297
+staxysp (staxsp.o):
+    window.o                  stdlib/window.s:677
+    window.o                  stdlib/window.s:677
+    mem.o                     stdlib/mem.s:297
+    main.o                    src/main.s:740
+subysp (subysp.o):
+    mem.o                     stdlib/mem.s:297
 tmp1 (zeropage.o):
+    staspidx.o                runtime/staspidx.s:9
+    shelp.o                   runtime/shelp.s:12
+    mul.o                     runtime/mul.s:10
+    mod.o                     runtime/mod.s:12
+    incaxy.o                  runtime/incaxy.s:8
+    div.o                     runtime/div.s:12
+    decaxy.o                  runtime/decaxy.s:8
     copydata.o                common/copydata.s:9
+    asr.o                     runtime/asr.s:16
+    graphics.o                stdlib/graphics.s:11
+tmp2 (zeropage.o):
+    shelp.o                   runtime/shelp.s:12
+    div.o                     runtime/div.s:12
+tosdiva0 (div.o):
+    mem.o                     stdlib/mem.s:297
+    graphics.o                stdlib/graphics.s:2354
+tosdivax (div.o):
+    main.o                    src/main.s:740
+tosicmp (icmp.o):
+    window.o                  stdlib/window.s:677
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+tosmoda0 (mod.o):
+    mem.o                     stdlib/mem.s:297
+tosmula0 (mul8.o):
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+tosmulax (mul.o):
+    main.o                    src/main.s:740
+tossuba0 (sub.o):
+    mem.o                     stdlib/mem.s:297
+tosumula0 (mul8.o):
+    graphics.o                stdlib/graphics.s:2354
+    graphics.o                stdlib/graphics.s:2354
+udiv16 (udiv.o):
+    shelp.o                   runtime/shelp.s:11
 zerobss (zerobss.o):
     crt0.o                    cpu/crt0.s:9
 

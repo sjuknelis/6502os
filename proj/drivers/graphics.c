@@ -5,6 +5,8 @@
 #define SCREEN_HI     *(char*) 0x8001
 #define SCREEN_DATA   *(char*) 0x8002
 
+#define SCREEN_EASY   *(char*) 0x8009
+
 #define NO_INT   *(char*) 0x7000
 
 void hline(char x,char w,char y,char color) {
@@ -39,6 +41,14 @@ void krectangle(char x,char w,char y,char h,char color) {
     hline(x,w,i,color);
   }
 }
+
+/*void krectangle(char x,char w,char y,char h,char color) {
+  SCREEN_EASY = x;
+  SCREEN_EASY = y;
+  SCREEN_EASY = w;
+  SCREEN_EASY = h;
+  SCREEN_EASY = color;
+}*/
 
 void hreplace(char x,char w,char y,char to,char from) {
   const char to_color_byte = (to << 4) | to;

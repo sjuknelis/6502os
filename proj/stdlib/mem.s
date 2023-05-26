@@ -11,6 +11,7 @@
 	.importzp	tmp1, tmp2, tmp3, tmp4, ptr1, ptr2, ptr3, ptr4
 	.macpack	longbranch
 	.export		_strcmp
+	.export		_memcpy
 	.export		_memset
 	.export		_inttostr
 
@@ -91,6 +92,56 @@ L0004:	ldy     #$04
 	bne     L0002
 	tax
 L0001:	jmp     incsp5
+
+.endproc
+
+; ---------------------------------------------------------------
+; void __near__ memcpy (char *dest, char *src, int bytes)
+; ---------------------------------------------------------------
+
+.segment	"CODE"
+
+.proc	_memcpy: near
+
+.segment	"CODE"
+
+	jsr     pushax
+	jsr     push0
+	jmp     L0004
+L0002:	jsr     ldax0sp
+	clc
+	ldy     #$06
+	adc     (sp),y
+	sta     sreg
+	txa
+	iny
+	adc     (sp),y
+	sta     sreg+1
+	jsr     ldax0sp
+	clc
+	ldy     #$04
+	adc     (sp),y
+	sta     ptr1
+	txa
+	iny
+	adc     (sp),y
+	sta     ptr1+1
+	ldy     #$00
+	lda     (ptr1),y
+	sta     (sreg),y
+	ldx     #$00
+	lda     #$01
+	jsr     addeq0sp
+L0004:	jsr     ldax0sp
+	ldy     #$02
+	cmp     (sp),y
+	txa
+	iny
+	sbc     (sp),y
+	bvc     L0005
+	eor     #$80
+L0005:	bmi     L0002
+	jmp     incsp8
 
 .endproc
 

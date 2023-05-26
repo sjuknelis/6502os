@@ -1,7 +1,7 @@
 import sys,array,time
-from cpu import CPU
+from pcpu import CPU
 from mmu import MMU
-from hdd import read_hdd_page
+from hdd import read_hdd_page,write_hdd_page
 
 logging = "logging" in sys.argv
 frame_logging = "frame" in sys.argv
@@ -22,23 +22,26 @@ if graphics:
     import pygame
     pygame.init()
     screen = pygame.display.set_mode((512,512))
-    screen.fill((0,0,0))
+    screen.fill((255,255,255))
     pygame.display.set_caption("6502")
     clock = pygame.time.Clock()
 
 alterations = []
-screen_matrix = array.array("B",[0] * 256 * 128)
+screen_matrix = array.array("B",[7] * 256 * 128)
 screen_matrix_pointer = 0
 mouse_pos = (0,0)
 mouse_down = False
 mouse_impulse = False
 key_down = 0
 
+screen_rectangle_data = [0,0,0,0,0]
+screen_rectangle_index = 0
+
 def io_write(index,value):
     if logging:
         print("io",hex(index),hex(value))
 
-    global screen_matrix,screen_matrix_pointer,key_down,mouse_impulse,mmu
+    global screen_matrix,screen_matrix_pointer,key_down,mouse_impulse,mmu,screen_rectangle_data,screen_rectangle_index
 
     if index == 0:
         # Screen lo
@@ -58,6 +61,15 @@ def io_write(index,value):
         mouse_impulse = False
     elif index == 8:
         read_hdd_page(mmu,value)
+    elif index == 9:
+        screen_rectangle_data[screen_rectangle_index] = value
+        screen_rectangle_index += 1
+        if screen_rectangle_index >= 5:
+            screen_rectangle_index = 0
+            print(screen_rectangle_data[4])
+            pygame.draw.rect(screen,COLORS[screen_rectangle_data[4] & 0x07],(screen_rectangle_data[0] * 2,screen_rectangle_data[1] * 2,screen_rectangle_data[2] * 2 + 2,screen_rectangle_data[3] * 2))
+    elif index == 10:
+        write_hdd_page(mmu,value)
 
 def io_read(index):
     if index == 2:

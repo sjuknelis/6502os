@@ -7,6 +7,14 @@ int strcmp(char* stra,char* strb) {
   return 0;
 }
 
+void memcpy(char* dest,char* src,int bytes) {
+  int i = 0;
+  while ( i < bytes ) {
+    dest[i] = src[i];
+    i++;
+  }
+}
+
 void memset(char* mem,char value,char size) {
   char i = 0;
   for ( ; i < size; i++ ) {

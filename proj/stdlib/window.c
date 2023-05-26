@@ -8,8 +8,8 @@
 
 window_element_t* first_window_element;
 window_element_t* last_window_element;
-char window_x = 50;
-char window_y = 50;
+char window_x = 0;
+char window_y = 0;
 char mouse_triggered = 0;
 
 char input_box_index = 0;
@@ -27,8 +27,6 @@ void render() {
   window_element_t* element = first_window_element;
   char x = window_x;
   char y = window_y;
-  if ( moving_window ) krectangle(x,10,y - 10,10,3);
-  else krectangle(x,10,y - 10,10,1);
   while ( element != 0 ) {
     if ( element -> new_row ) {
       x = window_x;
@@ -110,7 +108,7 @@ void update_buttons() {
         element -> on = 1;
         if ( input_byte & 0x80 ) {
           if ( ! mouse_triggered ) {
-            (element -> action)();
+            (element -> action)(element -> text);
             render();
           }
           mouse_triggered = 1;

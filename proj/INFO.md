@@ -62,7 +62,17 @@ The function `process_syscalls(memory_bank)` is responsible for reading the inte
 
 ## 7. Printing text to the screen (drivers/graphics.c)
 
-In order to draw text to the screen, 
+In order to draw text to the screen, I found a font on Stack Overflow represented in a hexadecimal format. Each letter is 8 pixels wide, and each row of the character is one byte, where each bit represents whether the pixel in the row is black or white. From there, it is simply a matter of parsing this format and drawing it onto the screen using the screen pixel IO ports.
+
+## 8. Filesystem (drivers/fs.c)
+
+For this OS, I implemented a flat filesystem with no directories other than the root directory. I divided the disk into pages of 0x1000 bytes each. The first page represents the root directory and contains a series of 32-byte entries, each of which represents a file. A file entry encodes the name of the file and the indices of the disk pages at which it can be found. Each file entry can encode 6 disk page pointers for its file, for a total of 0x6000 bytes represented by each file entry, and it is also possible for there to be multiple entries in the root directory for the same file. In this case, the pointers in each file entry are joined together to form a file of larger than 0x6000 bytes in size.
+
+In the filesystem API, the user calls the `readdir()` function to obtain a pointer to a file entry. The user can check the entry and, if it is not the desired entry, they can call `readdir()` again to get the next entry in the root directory. When the desired entry is found, the `open(entry)` function should be called. Then the `read(pointer,number of bytes)` command can be called to read the designated number of bytes to the designated pointer in RAM.
+
+## 9. Windowing (stdlib/window.c)
+
+Windowing in my OS consists of an API that the application programmer can call. It works off of a grid system, where the programmer can create elements having a fixed with and can specify whether they are clickable and what should occur when they are clicked. By obtaining a reference to a created element, its properties (such as its text content) can be dynamically changed. In order to prevent unnecessary redraws to the screen, which is an expensive operation for this system, the application needs to set a rerender flag on any element that it changes.
 
 ## I/O Device Reference
 
@@ -75,6 +85,4 @@ In order to draw text to the screen,
 * `$8005`: Mouse X pixel
 * `$8006`: Mouse Y pixel
 * `$8007`: Mouse/keyboard last event (write to clear)
-* `$8008`: Disk CHS low byte
-* `$8009`: Disk CHS high byte
-* `$800a`: Disk DMA bank (7 MSB bank index, LSB read/write)
+* `$8008`: Disk DMA read from page

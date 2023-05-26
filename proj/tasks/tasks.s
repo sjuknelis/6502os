@@ -12,10 +12,10 @@
 	.macpack	longbranch
 	.import		_init_task_internal
 	.import		_continue_task
+	.import		_exec
 	.import		_krectangle
 	.import		_ksprint_hex
-	.import		_flashing
-	.import		_cmain
+	.import		_emain
 	.export		_tasks
 	.export		_init_task
 	.export		_flash_index
@@ -33,7 +33,7 @@ _flash_triggered:
 .segment	"BSS"
 
 _tasks:
-	.res	24,$00
+	.res	9,$00
 
 ; ---------------------------------------------------------------
 ; void __near__ init_task (char mb, void *func)
@@ -101,7 +101,7 @@ _tasks:
 	lda     #$00
 	jsr     pushax
 	jsr     pusha
-	jmp     L000D
+	jmp     L0009
 L0002:	ldy     #$02
 	jsr     ldaxysp
 	sta     ptr1
@@ -189,7 +189,7 @@ L0002:	ldy     #$02
 	ldy     #$00
 	clc
 	lda     #$06
-	jmp     L000F
+	jmp     L000B
 L0005:	ldy     #$02
 	jsr     ldaxysp
 	sta     ptr1
@@ -230,10 +230,7 @@ L0005:	ldy     #$02
 	tax
 	lda     sreg
 	jsr     _ksprint_hex
-	ldy     #$00
-	clc
-	lda     #$03
-	jmp     L000F
+	jmp     L000E
 L0007:	ldy     #$02
 	jsr     ldaxysp
 	sta     ptr1
@@ -288,48 +285,12 @@ L0007:	ldy     #$02
 	iny
 	txa
 	sta     (ptr2),y
-	ldy     #$00
+L000E:	ldy     #$00
 	clc
 	lda     #$03
-	jmp     L000F
-L0009:	ldy     #$02
-	jsr     ldaxysp
-	sta     ptr1
-	stx     ptr1+1
-	ldy     #$00
-	lda     (sp),y
-	tay
-	lda     (ptr1),y
-	cmp     #$04
-	bne     L000B
-	lda     _flash_index
-	jsr     pusha
-	lda     #<(_flashing)
-	ldx     #>(_flashing)
-	jsr     _init_task
-	inc     _flash_index
-	jmp     L0012
-L000B:	ldy     #$02
-	jsr     ldaxysp
-	sta     ptr1
-	stx     ptr1+1
-	ldy     #$00
-	lda     (sp),y
-	tay
-	lda     (ptr1),y
-	cmp     #$05
-	bne     L000D
-	lda     #$00
-	sta     _tasks+6
-	sta     _tasks+9
-	lda     #$02
-	sta     _flash_index
-L0012:	ldy     #$00
-	clc
-	lda     #$01
-L000F:	adc     (sp),y
+L000B:	adc     (sp),y
 	sta     (sp),y
-L000D:	ldy     #$02
+L0009:	ldy     #$02
 	jsr     ldaxysp
 	sta     ptr1
 	stx     ptr1+1
@@ -355,16 +316,32 @@ L000D:	ldy     #$02
 	jsr     decsp2
 	lda     #$00
 	jsr     pusha
-L0027:	lda     #$00
-L0034:	tay
+	lda     #$01
+	jsr     pusha
+	lda     #<(_emain)
+	ldx     #>(_emain)
+	jsr     _init_task
+L0022:	lda     #$00
+	tay
 	sta     (sp),y
 	lda     #$01
 	ldy     #$02
-L0025:	sta     (sp),y
-	cmp     #$08
+L0020:	sta     (sp),y
+	cmp     #$03
 	jcs     L0006
 	ldx     #$00
-	lda     (sp),y
+	lda     $800A
+	cmp     #$FF
+	bne     L0024
+	stx     $800A
+	tya
+	jsr     pusha
+	lda     #<(_exec)
+	ldx     #>(_exec)
+	jsr     _init_task
+	ldy     #$02
+	ldx     #$00
+L0024:	lda     (sp),y
 	jsr     mulax3
 	sta     ptr1
 	txa
@@ -399,9 +376,9 @@ L0025:	sta     (sp),y
 	jsr     _process_syscalls
 	lda     #$01
 	tay
-L0024:	sta     (sp),y
-	cmp     #$08
-	bcs     L002A
+L001F:	sta     (sp),y
+	cmp     #$03
+	bcs     L0027
 	ldx     #$00
 	lda     (sp),y
 	jsr     mulax3
@@ -415,10 +392,10 @@ L0024:	sta     (sp),y
 	ldy     #$02
 	jsr     ldaxidx
 	cpx     #$00
-	bne     L0032
+	bne     L002A
 	cmp     #$00
-	beq     L0010
-L0032:	ldy     #$01
+	beq     L0011
+L002A:	ldy     #$01
 	ldx     #$00
 	lda     (sp),y
 	jsr     mulax3
@@ -439,31 +416,31 @@ L0032:	ldy     #$01
 	iny
 	txa
 	sta     (sreg),y
-L0010:	ldy     #$01
+L0011:	ldy     #$01
 	clc
 	tya
 	adc     (sp),y
-	jmp     L0024
-L002A:	tya
+	jmp     L001F
+L0027:	tya
 	dey
 	sta     (sp),y
 L0007:	ldy     #$02
 	clc
 	lda     #$01
 	adc     (sp),y
-	jmp     L0025
+	jmp     L0020
 L0006:	ldy     #$00
 	lda     (sp),y
-	bne     L002C
+	jne     L0022
 	lda     #$01
 	sta     $7FF3
-L002B:	lda     $7FF3
-	bne     L002B
+L0028:	lda     $7FF3
+	bne     L0028
 	lda     #$01
 	ldy     #$02
-L0026:	sta     (sp),y
-	cmp     #$08
-	bcs     L002C
+L0021:	sta     (sp),y
+	cmp     #$03
+	jcs     L0022
 	ldx     #$00
 	lda     (sp),y
 	jsr     mulax3
@@ -477,10 +454,10 @@ L0026:	sta     (sp),y
 	ldy     #$02
 	jsr     ldaxidx
 	cpx     #$00
-	bne     L0033
+	bne     L002B
 	cmp     #$00
-	beq     L001A
-L0033:	ldy     #$02
+	beq     L001B
+L002B:	ldy     #$02
 	ldx     #$00
 	lda     (sp),y
 	jsr     mulax3
@@ -501,42 +478,11 @@ L0033:	ldy     #$02
 	iny
 	txa
 	sta     (sreg),y
-L001A:	ldy     #$02
+L001B:	ldy     #$02
 	clc
 	lda     #$01
 	adc     (sp),y
-	jmp     L0026
-L002C:	lda     #$00
-	jsr     pusha
-	lda     #$0A
-	jsr     pusha
-	lda     #$00
-	jsr     pusha
-	lda     #$0A
-	jsr     pusha
-	lda     #$04
-	jsr     _krectangle
-	lda     $8005
-	cmp     #$0B
-	bcs     L002D
-	lda     $8006
-	cmp     #$0B
-	bcc     L002E
-L002D:	lda     #$00
-	jmp     L0030
-L002E:	lda     _flash_triggered
-	jne     L0027
-	lda     #$01
-	sta     _flash_triggered
-	lda     _flash_index
-	jsr     pusha
-	lda     #<(_cmain)
-	ldx     #>(_cmain)
-	jsr     _init_task
-	inc     _flash_index
-	jmp     L0027
-L0030:	sta     _flash_triggered
-	jmp     L0034
+	jmp     L0021
 
 .endproc
 
